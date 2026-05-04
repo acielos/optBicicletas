@@ -108,4 +108,68 @@ public abstract class Algoritmo {
 
         return resultado;
     }
+
+    // Método para usar la Busqueda Local en el grasp
+    protected List<Estacion> aplicarBusquedaLocal(List<Estacion> dataset){
+        List<Estacion> mejorVecino = Dataset.copiaDataset(dataset);
+
+        // Recomponemos la solución para que no haya problemas
+        mejorVecino = recomponer(mejorVecino);
+        double mejorFO = calcularFObjetivo(distanciaManhattan.calculaCompleto(mejorVecino), mejorVecino);
+
+        boolean mejoro = true;
+
+        // Copiamos y pegamos de BusquedaLocalPM
+        while (numEvaluaciones < 3000 && mejoro) {
+
+            // por si a caso
+            mejoro = false;
+            this.camion.carga = 7;
+
+            // Para salir aqui cuando sea 1
+            primero:
+            for (int l = 1; l < mejorVecino.size(); l++) {
+                for (int m = l+1; m < mejorVecino.size(); m++) {
+
+                    List<Estacion> vecinoOrden = new ArrayList<>(mejorVecino);
+                    Collections.swap(vecinoOrden, l, m);
+
+                    // Para cada iteracion
+                    this.camion.carga = 7;
+
+                    // Reconstruimos como antes para la sestaciones
+                    List<Estacion> copia = Dataset.copiaDataset(this.listaEstaciones);
+                    List<Estacion> vecinoEquilibrado = new ArrayList<>();
+                    for (Estacion estacion : vecinoOrden) {
+                        for (Estacion estacionEquilibrado : copia) {
+                            if (estacion.id == estacionEquilibrado.id) {
+                                vecinoEquilibrado.add(estacionEquilibrado);
+                            }
+                        }
+                    }
+
+                    // Equilibramos nuestras estaciones
+                    for (Estacion e : vecinoEquilibrado) {
+                        equilibrarEstacion(e);
+                    }
+
+                    // Hacemos los calculos de este vecino
+                    double distanciaVecino = distanciaManhattan.calculaCompleto(vecinoEquilibrado);
+                    double funcionObjetivoVecino = calcularFObjetivo(distanciaVecino, vecinoEquilibrado);
+
+                    if (funcionObjetivoVecino < this.mejorFuncionObjetivo) {
+                        mejorFO = funcionObjetivoVecino;
+                        this.entropiaFinal = calcularEntropiaTotal(vecinoEquilibrado);
+                        mejorVecino = vecinoEquilibrado;
+                        mejoro = true;
+
+                        break primero;
+                    }
+                }
+            }
+        }
+
+        // Devolvemos la mejor sol que nos qe
+        return mejorVecino;
+    }
 }
