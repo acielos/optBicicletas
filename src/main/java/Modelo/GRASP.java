@@ -20,8 +20,6 @@ public class GRASP extends Algoritmo{
         calcularDistancias();
     }
 
-
-
     @Override
     public void run() {
         for(int i = 0; i < 5; i++){
@@ -95,7 +93,7 @@ public class GRASP extends Algoritmo{
         // Bucle principal de nuestro greedyPro
         while(!noVisitadas.isEmpty()){
             // Para guardar las puntuaciones que obtiene cada una de las estaciones
-            List<double[]> puntos = new ArrayList<>();
+            List<estacionCandidata> puntos = new ArrayList<>();
 
             // Hacemos unn bucle para recorrer las no visitadas
             for (Estacion candidata:noVisitadas) {
@@ -111,22 +109,22 @@ public class GRASP extends Algoritmo{
                 double heuristica = 0.5 * distanciaInversa + 0.5 * deficitCapacidad;
 
                 // Añadimos nuestra estación para poder estudiarla más adelante
-                puntos.add(new double[]{candidata.id, heuristica});
+                puntos.add(new estacionCandidata(candidata.id, heuristica));
             }
 
             // Ordenamos nuestra lista de puntos para quedarnos con las 3 primeras
-            puntos.sort((a,b) -> Double.compare(b[1], a[1]));
+            puntos.sort((a,b) ->  Double.compare(b.heuristica, a.heuristica));
 
             // Nos quedaremos con las 3 primeras, siempre que haya al menos 3
             int tamannoRCL = Math.min(puntos.size(), tamLista);
-            List<double[]> puntosRCL = puntos.subList(0, tamannoRCL);
+            List<estacionCandidata> puntosRCL = puntos.subList(0, tamannoRCL);
 
             // El greedy probabilístico usa una ruleta ponderada;
 
             // Suma de la heuristica de cada uno de los elementos
             double sumaTotal = 0;
-            for (double[] entrada : puntosRCL) {
-                sumaTotal += entrada[1];
+            for (estacionCandidata entrada : puntosRCL) {
+                sumaTotal += entrada.heuristica;
             }
 
             // Generamos el numero para la ruleta
@@ -136,13 +134,13 @@ public class GRASP extends Algoritmo{
             double resultado = 0;
 
             // Por si a caso hubiera error, elegiríamos la última estación de las guardadas
-            int estacionElegida = (int) puntosRCL.getLast()[0];
+            int estacionElegida = puntosRCL.getLast().id;
 
             // Hacemos el bucle ahora si para nuestra ruleta
-            for (double[] entrada : puntosRCL) {
-                resultado += entrada[1];
+            for (estacionCandidata entrada : puntosRCL) {
+                resultado += entrada.heuristica;
                 if (numAleatorio <= resultado) {
-                    estacionElegida = (int) entrada[0];
+                    estacionElegida = entrada.id;
                     break;
                 }
             }
@@ -165,5 +163,7 @@ public class GRASP extends Algoritmo{
         }
         return solucion;
     }
+
+    private record estacionCandidata(int id, double heuristica){}
 }
 
