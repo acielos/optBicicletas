@@ -28,7 +28,7 @@ public class GRASP extends Algoritmo{
             this.numEvaluaciones = 0;
             this.camion.carga = 7;
 
-            // Cariables locales
+            // Variables locales
             double mejorFOSemilla = Double.POSITIVE_INFINITY;
             List<Estacion> mejorLista = null;
             double mejorDistanciaLocal = 0;
