@@ -16,7 +16,7 @@ public class GRASP extends Algoritmo{
     // Constructor de la clase
     public GRASP(List<Estacion> dataset){
         this.listaEstaciones = dataset;
-        this.distancias = null;
+        this.distancias = new Double[dataset.size()][dataset.size()];
         calcularDistancias();
     }
 
@@ -147,9 +147,23 @@ public class GRASP extends Algoritmo{
                 }
             }
 
+            // Buscamos toda la información de nuestra estación seleccionada
+            Estacion elegida = null;
+            for (Estacion e : noVisitadas) {
+                if (e.id == estacionElegida) {
+                    elegida = e;
+                    break;
+                }
+            }
+
+            // Guardamos
+            solucion.add(elegida);
+            equilibrarEstacion(elegida);
+            noVisitadas.remove(elegida);
+            estActual = elegida.id;
 
         }
-        return null;
+        return solucion;
     }
 }
 

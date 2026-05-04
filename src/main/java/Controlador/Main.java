@@ -74,13 +74,14 @@ public class Main {
                         System.out.println("    2. Búsqueda Aleatoria");
                         System.out.println("    3. Búsqueda Local: Mejor Vecino");
                         System.out.println("    4. Búsqueda Local: Primer Mejor");
-                        System.out.println("    5. Enfriamiento Simulado");
-                        System.out.println("    6. Búsqueda Tabú");
+                        System.out.println("    5. Enfriamiento Simulado (ND)");
+                        System.out.println("    6. Búsqueda Tabú (ND)");
+                        System.out.println("    7. Grasp");
                         System.out.println("    0. Salir");
                         System.out.println("==========================================");
                         System.out.print("      Escoga una opción -> ");
                         opc3 = sc.nextInt();
-                        if (opc3 < 0 || opc3 > 6) {
+                        if (opc3 < 0 || opc3 > 7) {
                             System.out.println("** ERROR - POR FAVOR INTRODUZCA UN VALOR VÁLIDO **");
                         }
 
@@ -107,10 +108,15 @@ public class Main {
                                 break;
                             case 5:
                                 System.out.println(" **** Enfriamiento Simulado **** ");
-                                Algoritmo enfriamientoSimulado = new EnfriamientoSimulado(dataset);
-                                enfriamientoSimulado.run();
+//                                Algoritmo enfriamientoSimulado = new EnfriamientoSimulado(dataset);
+//                                enfriamientoSimulado.run();
                                 break;
                             case 6:
+                                break;
+                            case 7:
+                                System.out.println(" **** GRASP **** ");
+                                Algoritmo grasp = new GRASP(dataset);
+                                grasp.run();
                                 break;
                         }
                     } while (opc3 != 0);
@@ -134,8 +140,8 @@ public class Main {
                     busquedaLocalPM.run();
 
                     System.out.println(" **** Enfriamiento Simulado **** ");
-                    Algoritmo enfriamientoSimulado = new EnfriamientoSimulado(dataset);
-                    enfriamientoSimulado.run();
+                    //Algoritmo enfriamientoSimulado = new EnfriamientoSimulado(dataset);
+                    //enfriamientoSimulado.run();
 
 //                    System.out.println(" **** Búsqueda Tabú **** ");
 //                    Algoritmo busquedaTabu = new BusquedaTabu(dataset, 200);
