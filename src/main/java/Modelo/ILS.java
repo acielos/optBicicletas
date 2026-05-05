@@ -1,11 +1,11 @@
 package main.java.Modelo;
 
-import main.java.DataTypes.Dataset;
-import main.java.DataTypes.Estacion;
+import main.java.DataTypes.*;
 
 import java.util.*;
 
 public class ILS extends Algoritmo{
+
     public ILS(List<Estacion> dataset){
         this.listaEstaciones = dataset;
         this.distancias = new Double[dataset.size()][dataset.size()];
