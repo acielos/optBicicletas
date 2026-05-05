@@ -172,4 +172,58 @@ public abstract class Algoritmo {
         // Devolvemos la mejor sol que nos qe
         return mejorVecino;
     }
+
+    // Método para hacer una mutacion "fuerte"?
+    protected List<Estacion> mutacionFuerte(List<Estacion> dataset, int tamano, Random rand) {
+        // Hacemos una copia de nuestro dataset
+        List<Estacion> copia = Dataset.copiaDataset(dataset);
+
+        int tamLista = copia.size();
+
+        // Generamos un número aleatorio entre 1 y tamaño de nuestra lista
+        int pos = 1 + rand.nextInt(tamLista - 1);
+
+        // Listas auxiliares
+        List<Integer> listaEstaciones = new ArrayList<>();
+        List<Estacion> elementos = new ArrayList<>();
+
+        // Bucle para quedarnos con las posiciones necesarias
+        for (int i = 0; i < tamano; i++) {
+            int indice = ((pos + i - 1) % (tamLista-1)) + 1;
+            listaEstaciones.add(indice);
+        }
+
+        for (int i: listaEstaciones) {
+            elementos.add(copia.get(i));
+        }
+
+        // Remezclamos
+        Collections.shuffle(elementos, rand);
+
+        // Introducimos los elementos de vuelta en la lista
+        for (int i = 0; i < listaEstaciones.size(); i++) {
+            copia.set(listaEstaciones.get(i), elementos.get(i));
+        }
+
+        // Devolvemos la modificada
+        return copia;
+    }
+
+    // Método para generar una solución inicial
+    protected List<Estacion> generarSolucionInicial(List<Estacion> dataset, Random rand) {
+        // Trabajamos con una copia
+        List<Estacion> copia = Dataset.copiaDataset(listaEstaciones);
+
+        // Partimos para que la primera no se mueva
+        List<Estacion> resto = new ArrayList<>(copia.subList(1, copia.size()));
+
+        // Mezclamos
+        Collections.shuffle(resto, rand);
+
+        // rejuntamos
+        resto.addFirst(copia.getFirst());
+
+        // Devolvemos
+        return resto;
+    }
 }
