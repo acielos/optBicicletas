@@ -89,7 +89,7 @@ public abstract class Algoritmo {
         this.camion.carga = 7;
 
         // Realizamos una copia del dataset
-        List<Estacion> copia = Dataset.copiaDataset(dataset);
+        List<Estacion> copia = Dataset.copiaDataset(this.listaEstaciones);
 
         // Reordenamos para que el orden sea el correcto de las visitas
         List<Estacion> resultado = new ArrayList<>();
@@ -119,8 +119,10 @@ public abstract class Algoritmo {
 
         boolean mejoro = true;
 
+        int numEvaluacionesLocal = 0;
+
         // Copiamos y pegamos de BusquedaLocalPM
-        while (numEvaluaciones < 3000 && mejoro) {
+        while (numEvaluacionesLocal < 3000 && mejoro) {
 
             // por si a caso
             mejoro = false;
@@ -156,10 +158,10 @@ public abstract class Algoritmo {
                     // Hacemos los calculos de este vecino
                     double distanciaVecino = distanciaManhattan.calculaCompleto(vecinoEquilibrado);
                     double funcionObjetivoVecino = calcularFObjetivo(distanciaVecino, vecinoEquilibrado);
+                    numEvaluacionesLocal++;
 
-                    if (funcionObjetivoVecino < this.mejorFuncionObjetivo) {
+                    if (funcionObjetivoVecino < mejorFO) {
                         mejorFO = funcionObjetivoVecino;
-                        this.entropiaFinal = calcularEntropiaTotal(vecinoEquilibrado);
                         mejorVecino = vecinoEquilibrado;
                         mejoro = true;
 
@@ -210,7 +212,7 @@ public abstract class Algoritmo {
     }
 
     // Método para generar una solución inicial
-    protected List<Estacion> generarSolucionInicial(List<Estacion> dataset, Random rand) {
+    protected List<Estacion> generarSolucionInicial(Random rand) {
         // Trabajamos con una copia
         List<Estacion> copia = Dataset.copiaDataset(listaEstaciones);
 

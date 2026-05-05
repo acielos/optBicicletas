@@ -77,11 +77,12 @@ public class Main {
                         System.out.println("    5. Enfriamiento Simulado (ND)");
                         System.out.println("    6. Búsqueda Tabú (ND)");
                         System.out.println("    7. Grasp");
+                        System.out.println("    8. ILS");
                         System.out.println("    0. Salir");
                         System.out.println("==========================================");
                         System.out.print("      Escoga una opción -> ");
                         opc3 = sc.nextInt();
-                        if (opc3 < 0 || opc3 > 7) {
+                        if (opc3 < 0 || opc3 > 8) {
                             System.out.println("** ERROR - POR FAVOR INTRODUZCA UN VALOR VÁLIDO **");
                         }
 
@@ -117,6 +118,11 @@ public class Main {
                                 System.out.println(" **** GRASP **** ");
                                 Algoritmo grasp = new GRASP(dataset);
                                 grasp.run();
+                                break;
+                            case 8:
+                                System.out.println(" **** ILS **** ");
+                                Algoritmo ils = new ILS(dataset);
+                                ils.run();
                                 break;
                         }
                     } while (opc3 != 0);
