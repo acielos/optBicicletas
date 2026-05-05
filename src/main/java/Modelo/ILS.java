@@ -3,9 +3,7 @@ package main.java.Modelo;
 import main.java.DataTypes.Dataset;
 import main.java.DataTypes.Estacion;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class ILS extends Algoritmo{
     public ILS(List<Estacion> dataset){
@@ -23,17 +21,11 @@ public class ILS extends Algoritmo{
             this.numEvaluaciones = 0;
             this.camion.carga = 7;
 
-            // Creamos una copia de nuestro dataset
-            List<Estacion> copia = Dataset.copiaDataset(this.listaEstaciones);
-
             // Generamos un numero aleatorio con nuestras semillas
             Random rand = new Random(this.semilla[i]);
 
             // Generamos una solución inicial aleatoria
             List<Estacion> listaInicial = recomponer(generarSolucionInicial(rand));
-
-            // Recomponemos nuestra solucion
-            // List<Estacion> listaRecompuesta = recomponer(listaInicial);
 
             // Aplicamos una búsqueda local a nuestra lista recompuesta
             List<Estacion> solActual = aplicarBusquedaLocal(listaInicial);
@@ -46,9 +38,7 @@ public class ILS extends Algoritmo{
             List<Estacion> mejorVecinoGlobal = Dataset.copiaDataset(solMejor);
 
             // Para usarlo mas adelante
-            double distanciaLocalMejor = distanciaMejor;
             double funcionLocalMejor;
-            double entropiaLocalMejor = entropiaMejor;
 
             List<Estacion> solucionLocal;
 
