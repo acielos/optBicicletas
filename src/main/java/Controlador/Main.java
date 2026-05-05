@@ -30,7 +30,7 @@ public class Main {
             System.out.println("    2. Mostrar Dataset");
             System.out.println("    3. Probar Estrategia");
             System.out.println("    4. Probar Todas las Estrategias");
-            System.out.println("    5. Salir");
+            System.out.println("    0. Salir");
             System.out.println("==========================================");
             System.out.print("    Escoga una opción -> ");
             opcion = sc.nextInt();
@@ -153,11 +153,11 @@ public class Main {
 //                    Algoritmo busquedaTabu = new BusquedaTabu(dataset, 200);
 //                    busquedaTabu.run();
                     break;
-                case 5:
+                default:
                     System.out.println("\n ***** Finalización del Programa ***** \n");
                     break;
             }
-        }while(opcion!=5);
+        }while(opcion!=0);
     }
 }
 
