@@ -78,11 +78,12 @@ public class Main {
                         System.out.println("    6. Búsqueda Tabú (ND)");
                         System.out.println("    7. Grasp");
                         System.out.println("    8. ILS");
+                        System.out.println("    9. VNS");
                         System.out.println("    0. Salir");
                         System.out.println("==========================================");
                         System.out.print("      Escoga una opción -> ");
                         opc3 = sc.nextInt();
-                        if (opc3 < 0 || opc3 > 8) {
+                        if (opc3 < 0 || opc3 > 9) {
                             System.out.println("** ERROR - POR FAVOR INTRODUZCA UN VALOR VÁLIDO **");
                         }
 
@@ -123,6 +124,11 @@ public class Main {
                                 System.out.println(" **** ILS **** ");
                                 Algoritmo ils = new ILS(dataset);
                                 ils.run();
+                                break;
+                            case 9:
+                                System.out.println(" **** VNS **** ");
+                                Algoritmo vns = new VNS(dataset);
+                                vns.run();
                                 break;
                         }
                     } while (opc3 != 0);
