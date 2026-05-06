@@ -14,7 +14,7 @@ public class VNS extends Algoritmo {
 
     @Override
     public void run() {
-        for (int i = 0; i < 5; i++){
+        for (int i = 0; i < 5; i++) {
             // Reseteamos
             this.mejorFuncionObjetivo = Double.POSITIVE_INFINITY;
             this.numEvaluaciones = 0;
