@@ -71,19 +71,15 @@ public class Main {
                         System.out.println("           Probar Estrategia ");
                         System.out.println("==========================================");
                         System.out.println("    1. Greedy");
-                        System.out.println("    2. Búsqueda Aleatoria");
-                        System.out.println("    3. Búsqueda Local: Mejor Vecino");
-                        System.out.println("    4. Búsqueda Local: Primer Mejor");
-                        System.out.println("    5. Enfriamiento Simulado (ND)");
-                        System.out.println("    6. Búsqueda Tabú (ND)");
-                        System.out.println("    7. Grasp");
-                        System.out.println("    8. ILS");
-                        System.out.println("    9. VNS");
+                        System.out.println("    2. Búsqueda Local: Primer Mejor");
+                        System.out.println("    3. Grasp");
+                        System.out.println("    4. ILS");
+                        System.out.println("    5. VNS");
                         System.out.println("    0. Salir");
                         System.out.println("==========================================");
                         System.out.print("      Escoga una opción -> ");
                         opc3 = sc.nextInt();
-                        if (opc3 < 0 || opc3 > 9) {
+                        if (opc3 < 0 || opc3 > 5) {
                             System.out.println("** ERROR - POR FAVOR INTRODUZCA UN VALOR VÁLIDO **");
                         }
 
@@ -94,38 +90,21 @@ public class Main {
                                 greedy.run();
                                 break;
                             case 2:
-                                System.out.println(" **** Búsqueda Aleatoria **** ");
-                                Algoritmo busquedaAleatoria = new BusquedaAleatoria(dataset);
-                                busquedaAleatoria.run();
-                                break;
-                            case 3:
-                                System.out.println(" **** Búsqueda Local Mejor Vecino **** ");
-                                Algoritmo busquedaLocalMV = new BusquedaLocalMV(dataset);
-                                busquedaLocalMV.run();
-                                break;
-                            case 4:
                                 System.out.println(" **** Búsqueda Local Primer Mejor **** ");
                                 Algoritmo busquedaLocalPM = new BusquedaLocalPM(dataset);
                                 busquedaLocalPM.run();
                                 break;
-                            case 5:
-                                System.out.println(" **** Enfriamiento Simulado **** ");
-//                                Algoritmo enfriamientoSimulado = new EnfriamientoSimulado(dataset);
-//                                enfriamientoSimulado.run();
-                                break;
-                            case 6:
-                                break;
-                            case 7:
+                            case 3:
                                 System.out.println(" **** GRASP **** ");
                                 Algoritmo grasp = new GRASP(dataset);
                                 grasp.run();
                                 break;
-                            case 8:
+                            case 4:
                                 System.out.println(" **** ILS **** ");
                                 Algoritmo ils = new ILS(dataset);
                                 ils.run();
                                 break;
-                            case 9:
+                            case 5:
                                 System.out.println(" **** VNS **** ");
                                 Algoritmo vns = new VNS(dataset);
                                 vns.run();
@@ -139,25 +118,22 @@ public class Main {
                     Algoritmo greedy = new Greedy(dataset);
                     greedy.run();
 
-                    System.out.println(" **** Búsqueda Aleatoria **** ");
-                    Algoritmo busquedaAleatoria = new BusquedaAleatoria(dataset);
-                    busquedaAleatoria.run();
-
-                    System.out.println(" **** Búsqueda Local Mejor Vecino **** ");
-                    Algoritmo busquedaLocalMV = new BusquedaLocalMV(dataset);
-                    busquedaLocalMV.run();
-
                     System.out.println(" **** Búsqueda Local Primer Mejor **** ");
                     Algoritmo busquedaLocalPM = new BusquedaLocalPM(dataset);
                     busquedaLocalPM.run();
 
-                    System.out.println(" **** Enfriamiento Simulado **** ");
-                    //Algoritmo enfriamientoSimulado = new EnfriamientoSimulado(dataset);
-                    //enfriamientoSimulado.run();
+                    System.out.println(" **** GRASP **** ");
+                    Algoritmo grasp = new GRASP(dataset);
+                    grasp.run();
 
-//                    System.out.println(" **** Búsqueda Tabú **** ");
-//                    Algoritmo busquedaTabu = new BusquedaTabu(dataset, 200);
-//                    busquedaTabu.run();
+                    System.out.println(" **** ILS **** ");
+                    Algoritmo ils = new ILS(dataset);
+                    ils.run();
+
+                    System.out.println(" **** VNS **** ");
+                    Algoritmo vns = new VNS(dataset);
+                    vns.run();
+
                     break;
                 default:
                     System.out.println("\n ***** Finalización del Programa ***** \n");

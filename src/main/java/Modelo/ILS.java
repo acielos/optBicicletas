@@ -49,9 +49,9 @@ public class ILS extends Algoritmo{
 
                 // Comprobamos que FO es menor
                 if (funcionLocalMejor <= funcionMejor){
-                    solucionLocal = Dataset.copiaDataset(solActual);
+                    solucionLocal = solActual;
                 } else {
-                    solucionLocal = Dataset.copiaDataset(solMejor);
+                    solucionLocal = solMejor;
                 }
 
                 // Hacemos la mutación

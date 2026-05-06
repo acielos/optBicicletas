@@ -137,7 +137,7 @@ public abstract class Algoritmo {
                     Collections.swap(vecinoOrden, l, m);
 
                     // Para cada iteracion
-                    this.camion.carga = 7;
+                    this.camion = new Camion();
 
                     // Reconstruimos como antes para la sestaciones
                     List<Estacion> copia = Dataset.copiaDataset(this.listaEstaciones);
