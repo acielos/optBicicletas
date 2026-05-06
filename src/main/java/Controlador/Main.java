@@ -9,8 +9,6 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        DistanciaManhattan distanciaManhattan = new DistanciaManhattan();
-
         // Abrimos scaner
         Scanner sc = new Scanner(System.in);
 
@@ -21,7 +19,7 @@ public class Main {
         String ruta = "././datasetBicis.tsp";
         List<Estacion> dataset = new ArrayList<>();
 
-        int opcion = 0;
+        int opcion;
         do {
             System.out.println(" ");
             System.out.println("    Aplicación Gestión de Estaciones");
@@ -58,14 +56,14 @@ public class Main {
 
                     break;
                 case 2:
-                    if (dataset == null || dataset.isEmpty()) {
+                    if (dataset.isEmpty()) {
                         System.out.println("\nERROR - DATASET NO CARGADO\n");
                     }else{
                         Dataset.mostrarDataset(dataset);
                     }
                     break;
                 case 3:
-                    int opc3 = -1;
+                    int opc3;
                     do {
                         System.out.println(" ");
                         System.out.println("           Probar Estrategia ");

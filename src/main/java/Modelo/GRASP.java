@@ -9,10 +9,6 @@ import java.util.Random;
 
 public class GRASP extends Algoritmo{
 
-    // Creamos dos variables que no se modificarán
-    private final int  iteraciones = 10;
-    private final int tamLista = 3;
-
     // Constructor de la clase
     public GRASP(List<Estacion> dataset){
         this.listaEstaciones = dataset;
@@ -39,6 +35,8 @@ public class GRASP extends Algoritmo{
 
 
             // Bucle de iteraciones de GRASP
+            // Creamos dos variables que no se modificarán
+            int iteraciones = 10;
             for (int j = 0; j < iteraciones; j++) {
                 // Generamos un greedy probabilistico y le aplicamos la BL
                 List<Estacion> solucionGreedy = greedyProbabilistico(rand);
@@ -63,7 +61,7 @@ public class GRASP extends Algoritmo{
             this.recorrido = mejorLista;
 
             System.out.println("\n--- Resultado GRASP ---");
-            System.out.printf("Recorrido: ");
+            System.out.print("Recorrido: ");
             for (Estacion e : this.recorrido) System.out.print(e.id + " ");
             System.out.println("-> 0");
 
@@ -115,8 +113,11 @@ public class GRASP extends Algoritmo{
             // Ordenamos nuestra lista de puntos para quedarnos con las 3 primeras
             puntos.sort((a,b) ->  Double.compare(b.heuristica, a.heuristica));
 
-            // Nos quedaremos con las 3 primeras, siempre que haya al menos 3
+            // Variables que usaremos
+            int tamLista = 3;
             int tamannoRCL = Math.min(puntos.size(), tamLista);
+
+            // Nos quedaremos con las 3 primeras, siempre que haya al menos 3
             List<estacionCandidata> puntosRCL = puntos.subList(0, tamannoRCL);
 
             // El greedy probabilístico usa una ruleta ponderada;
@@ -156,6 +157,10 @@ public class GRASP extends Algoritmo{
 
             // Guardamos
             solucion.add(elegida);
+
+            // Por si hay errores
+            assert elegida != null;
+
             equilibrarEstacion(elegida);
             noVisitadas.remove(elegida);
             estActual = elegida.id;
