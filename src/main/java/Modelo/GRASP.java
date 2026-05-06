@@ -1,11 +1,8 @@
 package main.java.Modelo;
 
-import main.java.DataTypes.Dataset;
-import main.java.DataTypes.Estacion;
+import main.java.DataTypes.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class GRASP extends Algoritmo{
 
@@ -35,7 +32,6 @@ public class GRASP extends Algoritmo{
 
 
             // Bucle de iteraciones de GRASP
-            // Creamos dos variables que no se modificarán
             int iteraciones = 10;
             for (int j = 0; j < iteraciones; j++) {
                 // Generamos un greedy probabilistico y le aplicamos la BL
