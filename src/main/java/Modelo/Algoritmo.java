@@ -9,8 +9,6 @@ public abstract class Algoritmo {
     protected List<Estacion> listaEstaciones;
     public Camion camion = new Camion();
 
-    protected Intercambio inter = new Intercambio();
-
     // Semillas para los algoritmos
     protected long[] semilla = {12345L, 67890L, 11111L, 54321L, 99999L};
 
