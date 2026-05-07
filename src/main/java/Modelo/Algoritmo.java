@@ -46,8 +46,8 @@ public abstract class Algoritmo {
     protected double calcularFObjetivo(double kms, List<Estacion> estaciones) {
         numEvaluaciones++;
         double entropia  = calcularEntropiaTotal(estaciones);
-        double nEstaciones = estaciones.size();
-        return kms + alpha * (nEstaciones - entropia);
+        double nEstaciones = estaciones.size() -1;
+        return kms + 1.5 * (nEstaciones - entropia);
     }
 
     protected double calcularEntropiaTotal(List<Estacion> estaciones) {

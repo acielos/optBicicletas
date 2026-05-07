@@ -102,7 +102,7 @@ public class Main {
 
                     break;
                 case 4:
-                    for (int i = 0; i < 5; i++){
+                    for (int i = 0; i <= 5; i++){
                         ejecutarAlgoritmo(i, dataset);
                     }
 
@@ -114,7 +114,7 @@ public class Main {
         }while(opcion!=0);
     }
 
-    public static void ejecutarAlgoritmo(int op, List<Estacion> dataset){
+    private static void ejecutarAlgoritmo(int op, List<Estacion> dataset){
         switch (op) {
             case 1:
                 System.out.println(" **** Greedy **** ");
