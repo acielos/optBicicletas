@@ -29,8 +29,7 @@ public class Dataset {
                     break; // Empezar a leer coordenadas a partir de aquí
                 }
             }
-
-            Estacion[] dataset = new Estacion[dimension];
+            
             int count = 0;
 
             // Leer coordenadas hasta EOF o hasta 'dimension' líneas válidas
@@ -50,10 +49,6 @@ public class Dataset {
                 }
             }
 
-            // Si hubiese menos puntos que la DIMENSION declarada, recortar el array
-            if (count != dimension) {
-                dataset = java.util.Arrays.copyOf(dataset, count);
-            }
             return lecturaDataset;
         }
     }

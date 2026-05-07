@@ -19,7 +19,7 @@ public class ILS extends Algoritmo{
             // Reseteamos por si
             this.mejorFuncionObjetivo = Double.POSITIVE_INFINITY;
             this.numEvaluaciones = 0;
-            this.camion.carga = 7;
+            this.camion.reset();
 
             // Generamos un numero aleatorio con nuestras semillas
             Random rand = new Random(this.semilla[i]);
@@ -86,19 +86,8 @@ public class ILS extends Algoritmo{
             this.distanciaRecorrida = distanciaMejor;
             this.entropiaFinal = entropiaMejor;
 
-
-            System.out.println("\n--- Resultado ILS ---");
-            System.out.printf("Recorrido: ");
-            for (Estacion e : this.recorrido) System.out.print(e.id + " ");
-            System.out.println("-> 0");
-
-            System.out.printf("Kilómetros recorridos : %.4f km%n", this.distanciaRecorrida);
-            System.out.printf("Función objetivo      : %.4f%n", this.mejorFuncionObjetivo);
-            System.out.printf("Evaluaciones          : %d%n", this.numEvaluaciones);
-            System.out.printf("%nCarga final del camión: %d/%d bicis%n", this.camion.carga, this.camion.getCapacidad());
-
+            // Mostramos los resultados
+            mostrarResultados("ILS");
         }
-
-
     }
 }

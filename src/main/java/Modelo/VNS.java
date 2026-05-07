@@ -18,7 +18,7 @@ public class VNS extends Algoritmo {
             // Reseteamos
             this.mejorFuncionObjetivo = Double.POSITIVE_INFINITY;
             this.numEvaluaciones = 0;
-            this.camion.carga = 7;
+            this.camion.reset();
 
             // Usamos las semillas para la reproductibilidad
             Random rand = new Random(this.semilla[i]);
@@ -86,18 +86,8 @@ public class VNS extends Algoritmo {
             this.recorrido = mejorVecino;
             this.entropiaFinal = calcularEntropiaTotal(mejorVecino);
 
-            System.out.println("\n--- Resultado VNS ---");
-            System.out.printf("Recorrido: ");
-            for (Estacion e : this.recorrido) System.out.print(e.id + " ");
-            System.out.println("-> 0");
-
-            System.out.printf("Kilómetros recorridos : %.4f km%n", this.distanciaRecorrida);
-            System.out.printf("Función objetivo      : %.4f%n", this.mejorFuncionObjetivo);
-            System.out.printf("Evaluaciones          : %d%n", this.numEvaluaciones);
-            System.out.printf("%nCarga final del camión: %d/%d bicis%n", this.camion.carga, this.camion.getCapacidad());
-
-
+            // mostramos los resultados
+            mostrarResultados("VNS");
         }
-
     }
 }

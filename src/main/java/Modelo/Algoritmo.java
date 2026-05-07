@@ -7,7 +7,7 @@ public abstract class Algoritmo {
 
     // Dataset de estaciones y estado del camión
     protected List<Estacion> listaEstaciones;
-    public Camion camion = new Camion();
+    protected Camion camion = new Camion();
 
     // Semillas para los algoritmos
     protected long[] semilla = {12345L, 67890L, 11111L, 54321L, 99999L};
@@ -33,7 +33,7 @@ public abstract class Algoritmo {
     // Método que cada algoritmo debe implementar
     public abstract void run();
 
-    public void calcularDistancias() {
+    protected void calcularDistancias() {
         for (int i = 0; i < listaEstaciones.size(); i++) {
             distancias[i][i] = Double.POSITIVE_INFINITY;
             for (int j = 0; j < i; j++) {
@@ -44,14 +44,14 @@ public abstract class Algoritmo {
         }
     }
 
-    public double calcularFObjetivo(double kms, List<Estacion> estaciones) {
+    protected double calcularFObjetivo(double kms, List<Estacion> estaciones) {
         numEvaluaciones++;
         double entropia  = calcularEntropiaTotal(estaciones);
         double nEstaciones = estaciones.size();
         return kms + alpha * (nEstaciones - entropia);
     }
 
-    public double calcularEntropiaTotal(List<Estacion> estaciones) {
+    protected double calcularEntropiaTotal(List<Estacion> estaciones) {
         double total = 0.0;
         for (Estacion e : estaciones) {
             if (e.carga == 0 || e.carga == e.capacidad) continue; // entropía 0
@@ -84,7 +84,7 @@ public abstract class Algoritmo {
 
     protected List<Estacion> recomponer(List<Estacion> dataset){
         // Aseguramos la carga del camión correcta
-        this.camion.carga = 7;
+        this.camion.reset();
 
         // Realizamos una copia del dataset
         List<Estacion> copia = Dataset.copiaDataset(this.listaEstaciones);
@@ -124,7 +124,7 @@ public abstract class Algoritmo {
 
             // por si a caso
             mejoro = false;
-            this.camion.carga = 7;
+            this.camion.reset();
 
             // Para salir aqui cuando sea 1
             primero:
@@ -135,23 +135,10 @@ public abstract class Algoritmo {
                     Collections.swap(vecinoOrden, l, m);
 
                     // Para cada iteracion
-                    this.camion = new Camion();
+                    this.camion.reset();
 
                     // Reconstruimos como antes para la sestaciones
-                    List<Estacion> copia = Dataset.copiaDataset(this.listaEstaciones);
-                    List<Estacion> vecinoEquilibrado = new ArrayList<>();
-                    for (Estacion estacion : vecinoOrden) {
-                        for (Estacion estacionEquilibrado : copia) {
-                            if (estacion.id == estacionEquilibrado.id) {
-                                vecinoEquilibrado.add(estacionEquilibrado);
-                            }
-                        }
-                    }
-
-                    // Equilibramos nuestras estaciones
-                    for (Estacion e : vecinoEquilibrado) {
-                        equilibrarEstacion(e);
-                    }
+                    List<Estacion> vecinoEquilibrado = recomponer(vecinoOrden);
 
                     // Hacemos los calculos de este vecino
                     double distanciaVecino = distanciaManhattan.calculaCompleto(vecinoEquilibrado);
@@ -226,4 +213,18 @@ public abstract class Algoritmo {
         // Devolvemos
         return resto;
     }
+
+    // Método para mostrar los resultados obtenidos
+    protected void mostrarResultados(String algoritmo){
+        System.out.println("\n--- Resultado " + algoritmo + " ---");
+        System.out.printf("Recorrido: ");
+        for (Estacion e : this.recorrido) System.out.print(e.id + " ");
+        System.out.println("-> 0");
+
+        System.out.printf("Kilómetros recorridos : %.4f km%n", this.distanciaRecorrida);
+        System.out.printf("Función objetivo      : %.4f%n", this.mejorFuncionObjetivo);
+        System.out.printf("Evaluaciones          : %d%n", this.numEvaluaciones);
+        System.out.printf("%nCarga final del camión: %d/%d bicis%n", this.camion.carga, this.camion.getCapacidad());
+    }
+
 }

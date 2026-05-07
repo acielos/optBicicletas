@@ -18,13 +18,10 @@ public class BusquedaLocalPM extends Algoritmo {
             // Vamos a trabajar con una copia del dataset, para que no se lie
             List<Estacion> datasetCopiado = Dataset.copiaDataset(this.listaEstaciones);
 
-            // Array para guardar las distancias de los distintos vecinos
-            List<Double> funcionObjetivo = new ArrayList<>(datasetCopiado.size());
-
             // Reseteamos
             this.mejorFuncionObjetivo = Double.POSITIVE_INFINITY;
             this.numEvaluaciones = 0;
-            this.camion.carga = 7;
+            this.camion.reset();
 
             // Para la semilla
             Random rand = new Random(this.semilla[i]);
@@ -42,15 +39,8 @@ public class BusquedaLocalPM extends Algoritmo {
             List<Estacion> mejorVecino = new ArrayList<>(mezclado);
 
             //Recomponemos la solución para asegurar que estaciones y cargas vayan en conjunto
-            List<Estacion> inicialEquilibrada = Dataset.copiaDataset(this.listaEstaciones);
             List<Estacion> inicialOrdenado = new ArrayList<>();
-            for (Estacion estacionOrden : mejorVecino) {
-                for (Estacion estacion : inicialEquilibrada) {
-                    if (estacion.id == estacionOrden.id) {
-                        inicialOrdenado.add(estacion);
-                    }
-                }
-            }
+            inicialOrdenado = recomponer(mezclado);
 
             // Equilibramos nuestra solucion inicial
             for (Estacion e : inicialOrdenado) {
@@ -72,20 +62,19 @@ public class BusquedaLocalPM extends Algoritmo {
 
                 // por si a caso
                 mejoro = false;
-                funcionObjetivo.clear();
-                this.camion.carga = 7;
+                this.camion.reset();
 
                 // Para salir aqui cuando sea 1
                 primero:
                 for (int l = 1; l < mejorVecino.size(); l++) {
-                    for (int m = 1; m < mejorVecino.size(); m++) {
+                    for (int m = l+1; m < mejorVecino.size(); m++) {
 
                         //
                         List<Estacion> vecinoOrden = new ArrayList<>(mejorVecino);
                         Collections.swap(vecinoOrden, l, m);
 
                         // Para cada iteracion
-                        this.camion.carga = 7;
+                        this.camion.reset();
 
                         // Reconstruimos como antes para la sestaciones
                         List<Estacion> copia = Dataset.copiaDataset(this.listaEstaciones);
@@ -122,23 +111,7 @@ public class BusquedaLocalPM extends Algoritmo {
             }
 
             // Mostramos por pantalla la distancia calculada con cada una de las 5 semillas
-            System.out.println("\n--- Resultado Búsqueda Local: Primer Mejor ---");
-            System.out.printf("Recorrido: ");
-            for (Estacion e : recorrido) System.out.print(e.id + " ");
-            System.out.println("-> 0");
-
-            System.out.printf("Kilómetros recorridos : %.4f km%n", distanciaRecorrida);
-            System.out.printf("Función objetivo      : %.4f%n", this.mejorFuncionObjetivo);
-            System.out.printf("Evaluaciones          : %d%n", numEvaluaciones);
-
-            // Si queremos mostrar, pero ahora no
-//            System.out.println("\nEstado final de las estaciones:");
-//            System.out.printf("%-6s %-10s %-10s %-8s%n", "ID", "Carga", "Capacidad", "% ocup.");
-//            for (Estacion e : recorrido) {
-//                double pct = 100.0 * e.carga / e.capacidad;
-//                System.out.printf("%-6d %-10d %-10d %.1f%%%n", e.id, e.carga, e.capacidad, pct);
-//            }
-            System.out.printf("%nCarga final del camión: %d/%d bicis%n", camion.carga, camion.getCapacidad());
+            mostrarResultados("Busqueda Local PM");
         }
     }
 }

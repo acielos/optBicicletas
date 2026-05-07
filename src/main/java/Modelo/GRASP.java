@@ -19,7 +19,7 @@ public class GRASP extends Algoritmo{
             // Reseteamos por si a caso
             this.mejorFuncionObjetivo = Double.POSITIVE_INFINITY;
             this.numEvaluaciones = 0;
-            this.camion.carga = 7;
+            this.camion.reset();
 
             // Variables locales
             double mejorFOSemilla = Double.POSITIVE_INFINITY;
@@ -56,15 +56,8 @@ public class GRASP extends Algoritmo{
             this.entropiaFinal = mejorEntropiaLocal;
             this.recorrido = mejorLista;
 
-            System.out.println("\n--- Resultado GRASP ---");
-            System.out.print("Recorrido: ");
-            for (Estacion e : this.recorrido) System.out.print(e.id + " ");
-            System.out.println("-> 0");
-
-            System.out.printf("Kilómetros recorridos : %.4f km%n", this.distanciaRecorrida);
-            System.out.printf("Función objetivo      : %.4f%n", this.mejorFuncionObjetivo);
-            System.out.printf("Evaluaciones          : %d%n", this.numEvaluaciones);
-            System.out.printf("%nCarga final del camión: %d/%d bicis%n", this.camion.carga, this.camion.getCapacidad());
+            // mosrtamos los resultados
+            mostrarResultados("GRASP");
         }
     }
 
@@ -73,7 +66,7 @@ public class GRASP extends Algoritmo{
         List<Estacion> copiaGreedy = Dataset.copiaDataset(this.listaEstaciones);
 
         // Reseteamos por si a caso
-        this.camion.carga = 7;
+        this.camion.reset();
 
         // Las listas cpm las que vamos a trabjaar
         List<Estacion> solucion = new ArrayList<>();

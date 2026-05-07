@@ -5,10 +5,9 @@ import java.util.*;
 
 public class DistanciaManhattan {
     private double distancia_total;
-    private double radio = 6371.0;
+    private static final double radio = 6371.0;
 
     public double calculaDistancia(Estacion estacion1, Estacion estacion2) {
-        this.distancia_total = 0;
         // Calculamos en radianes los variables que necesitamos
         double dlat_rad = Math.toRadians(Math.abs(estacion2.latitud - estacion1.latitud));
         double dlon_rad = Math.toRadians(Math.abs(estacion2.longitud - estacion1.longitud));

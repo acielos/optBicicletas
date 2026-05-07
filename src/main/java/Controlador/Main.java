@@ -49,9 +49,9 @@ public class Main {
                         if (opc1 != 1 && opc1 != 2 && opc1 != 3) {
                             System.out.println("** ERROR - POR FAVOR INTRODUZCA UN VALOR VÁLIDO **");
                         }
-                        dataset = Dataset.leerFicheros(ruta);
                     }
 
+                    dataset = Dataset.leerFicheros(ruta);
                     casos.aplicarCaso(dataset, opc1);
 
                     break;
@@ -83,54 +83,28 @@ public class Main {
 
                         switch (opc3) {
                             case 1:
-                                System.out.println(" **** Greedy **** ");
-                                Algoritmo greedy = new Greedy(dataset);
-                                greedy.run();
+                                ejecutarAlgoritmo(opc3, dataset);
                                 break;
                             case 2:
-                                System.out.println(" **** Búsqueda Local Primer Mejor **** ");
-                                Algoritmo busquedaLocalPM = new BusquedaLocalPM(dataset);
-                                busquedaLocalPM.run();
+                                ejecutarAlgoritmo(opc3, dataset);
                                 break;
                             case 3:
-                                System.out.println(" **** GRASP **** ");
-                                Algoritmo grasp = new GRASP(dataset);
-                                grasp.run();
+                                ejecutarAlgoritmo(opc3, dataset);
                                 break;
                             case 4:
-                                System.out.println(" **** ILS **** ");
-                                Algoritmo ils = new ILS(dataset);
-                                ils.run();
+                                ejecutarAlgoritmo(opc3, dataset);
                                 break;
                             case 5:
-                                System.out.println(" **** VNS **** ");
-                                Algoritmo vns = new VNS(dataset);
-                                vns.run();
+                                ejecutarAlgoritmo(opc3, dataset);
                                 break;
                         }
                     } while (opc3 != 0);
 
                     break;
                 case 4:
-                    System.out.println(" **** Greedy **** ");
-                    Algoritmo greedy = new Greedy(dataset);
-                    greedy.run();
-
-                    System.out.println(" **** Búsqueda Local Primer Mejor **** ");
-                    Algoritmo busquedaLocalPM = new BusquedaLocalPM(dataset);
-                    busquedaLocalPM.run();
-
-                    System.out.println(" **** GRASP **** ");
-                    Algoritmo grasp = new GRASP(dataset);
-                    grasp.run();
-
-                    System.out.println(" **** ILS **** ");
-                    Algoritmo ils = new ILS(dataset);
-                    ils.run();
-
-                    System.out.println(" **** VNS **** ");
-                    Algoritmo vns = new VNS(dataset);
-                    vns.run();
+                    for (int i = 0; i < 5; i++){
+                        ejecutarAlgoritmo(i, dataset);
+                    }
 
                     break;
                 default:
@@ -138,6 +112,36 @@ public class Main {
                     break;
             }
         }while(opcion!=0);
+    }
+
+    public static void ejecutarAlgoritmo(int op, List<Estacion> dataset){
+        switch (op) {
+            case 1:
+                System.out.println(" **** Greedy **** ");
+                Algoritmo greedy = new Greedy(dataset);
+                greedy.run();
+                break;
+            case 2:
+                System.out.println(" **** Búsqueda Local Primer Mejor **** ");
+                Algoritmo busquedaLocalPM = new BusquedaLocalPM(dataset);
+                busquedaLocalPM.run();
+                break;
+            case 3:
+                System.out.println(" **** GRASP **** ");
+                Algoritmo grasp = new GRASP(dataset);
+                grasp.run();
+                break;
+            case 4:
+                System.out.println(" **** ILS **** ");
+                Algoritmo ils = new ILS(dataset);
+                ils.run();
+                break;
+            case 5:
+                System.out.println(" **** VNS **** ");
+                Algoritmo vns = new VNS(dataset);
+                vns.run();
+                break;
+        }
     }
 }
 

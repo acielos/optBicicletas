@@ -20,7 +20,7 @@ public class Greedy extends Algoritmo {
         this.recorrido.clear();
 
         // Preparamos el camión con 7 bicicletas
-        this.camion.carga = 7;
+        this.camion.reset();
 
         // Generamos la matriz de distancias
         this.distancias = new Double[listaEstaciones.size()][listaEstaciones.size()];

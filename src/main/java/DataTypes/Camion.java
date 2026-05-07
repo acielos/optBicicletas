@@ -1,7 +1,5 @@
 package main.java.DataTypes;
 
-import java.util.*;
-
 public class Camion {
     private int capacidad = 20;
     public int carga = 0;
@@ -10,4 +8,6 @@ public class Camion {
     public int getCapacidad() {
         return capacidad;
     }
+
+    public void reset() {this.carga = 7;}
 }
