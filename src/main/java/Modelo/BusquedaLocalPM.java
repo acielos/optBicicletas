@@ -77,20 +77,7 @@ public class BusquedaLocalPM extends Algoritmo {
                         this.camion.reset();
 
                         // Reconstruimos como antes para la sestaciones
-                        List<Estacion> copia = Dataset.copiaDataset(this.listaEstaciones);
-                        List<Estacion> vecinoEquilibrado = new ArrayList<>();
-                        for (Estacion estacion : vecinoOrden) {
-                            for (Estacion estacionEquilibrado : copia) {
-                                if (estacion.id == estacionEquilibrado.id) {
-                                    vecinoEquilibrado.add(estacionEquilibrado);
-                                }
-                            }
-                        }
-
-                        // Equilibramos nuestras estaciones
-                        for (Estacion e : vecinoEquilibrado) {
-                            equilibrarEstacion(e);
-                        }
+                        List<Estacion> vecinoEquilibrado = recomponer(vecinoOrden);
 
                         // Hacemos los calculos de este vecino
                         double distanciaVecino = distanciaManhattan.calculaCompleto(vecinoEquilibrado);

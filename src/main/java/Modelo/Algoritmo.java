@@ -12,7 +12,6 @@ public abstract class Algoritmo {
     // Semillas para los algoritmos
     protected long[] semilla = {12345L, 67890L, 11111L, 54321L, 99999L};
 
-    protected double mejorDistancia = Double.POSITIVE_INFINITY;
     protected double mejorFuncionObjetivo = Double.POSITIVE_INFINITY;
 
     // Matriz de distancias entre todas las estaciones
@@ -116,12 +115,10 @@ public abstract class Algoritmo {
         double mejorFO = calcularFObjetivo(distanciaManhattan.calculaCompleto(mejorVecino), mejorVecino);
 
         boolean mejoro = true;
-
         int numEvaluacionesLocal = 0;
 
         // Copiamos y pegamos de BusquedaLocalPM
         while (numEvaluacionesLocal < 3000 && mejoro) {
-
             // por si a caso
             mejoro = false;
             this.camion.reset();
@@ -130,7 +127,6 @@ public abstract class Algoritmo {
             primero:
             for (int l = 1; l < mejorVecino.size(); l++) {
                 for (int m = l+1; m < mejorVecino.size(); m++) {
-
                     List<Estacion> vecinoOrden = new ArrayList<>(mejorVecino);
                     Collections.swap(vecinoOrden, l, m);
 
@@ -226,5 +222,4 @@ public abstract class Algoritmo {
         System.out.printf("Evaluaciones          : %d%n", this.numEvaluaciones);
         System.out.printf("%nCarga final del camión: %d/%d bicis%n", this.camion.carga, this.camion.getCapacidad());
     }
-
 }

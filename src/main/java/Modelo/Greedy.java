@@ -9,9 +9,7 @@ public class Greedy extends Algoritmo {
         this.listaEstaciones = dataset;
     }
 
-
     public void run(){
-
         List<Estacion> copia = Dataset.copiaDataset(this.listaEstaciones);
 
         // Reseteamos por si se hacen varias ejecuciones
@@ -75,22 +73,7 @@ public class Greedy extends Algoritmo {
         this.mejorFuncionObjetivo = funObjetivo;
         this.fObjetivo = funObjetivo;
 
-
-        System.out.println("\n--- Resultado Greedy ---");
-        System.out.printf("Recorrido: ");
-        for (Estacion e : recorrido) System.out.print(e.id + " ");
-        System.out.println("-> 0");
-
-        System.out.printf("Kilómetros recorridos : %.4f km%n", distanciaRecorrida);
-        System.out.printf("Función objetivo      : %.4f%n", funObjetivo);
-        System.out.printf("Evaluaciones          : %d%n", numEvaluaciones);
-
-//        System.out.println("\nEstado final de las estaciones:");
-//        System.out.printf("%-6s %-10s %-10s %-8s%n", "ID", "Carga", "Capacidad", "% ocup.");
-//        for (Estacion e : recorrido) {
-//            double pct = 100.0 * e.carga / e.capacidad;
-//            System.out.printf("%-6d %-10d %-10d %.1f%%%n", e.id, e.carga, e.capacidad, pct);
-//        }
-        System.out.printf("%nCarga final del camión: %d/%d bicis%n", camion.carga, camion.getCapacidad());
+        // mostramos los resultados
+        mostrarResultados("Greedy");
     }
 }

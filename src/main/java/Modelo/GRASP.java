@@ -30,7 +30,6 @@ public class GRASP extends Algoritmo{
             // Generamos con el rand para las semillas
             Random rand =  new Random(this.semilla[i]);
 
-
             // Bucle de iteraciones de GRASP
             int iteraciones = 10;
             for (int j = 0; j < iteraciones; j++) {
@@ -157,7 +156,6 @@ public class GRASP extends Algoritmo{
         }
         return solucion;
     }
-
     private record estacionCandidata(int id, double heuristica){}
 }
 

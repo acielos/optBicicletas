@@ -78,7 +78,6 @@ public class ILS extends Algoritmo{
                 if (FO_Mutada < funcionLocalMejor) {
                     solActual =  Dataset.copiaDataset(solucionLocalMutadaBL);
                 }
-
             }
 
             this.mejorFuncionObjetivo = funcionMejor;
