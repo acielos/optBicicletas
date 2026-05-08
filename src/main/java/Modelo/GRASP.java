@@ -103,18 +103,16 @@ public class GRASP extends Algoritmo{
 
                 double puntuacion = 0.5 * distancia + 1.5 * deficitCapacidad;
 
-                // Añadimos nuestra estación para poder estudiarla más adelante
+                // Añadimos la puntuacion
                 puntos.add(new estacionCandidata(candidata.id, puntuacion));
             }
 
             // Ordenamos nuestra lista de puntos para quedarnos con las 3 primeras
             puntos.sort((a,b) ->  Double.compare(b.puntuacion, a.puntuacion));
 
-            // Variables que usaremos
             int tamLista = 3;
             int tamannoRCL = Math.min(puntos.size(), tamLista);
 
-            // Nos quedaremos con las 3 primeras, siempre que haya al menos 3
             List<estacionCandidata> puntosRCL = puntos.subList(0, tamannoRCL);
 
             // Suma de la puntuacion de cada uno de los elementos
