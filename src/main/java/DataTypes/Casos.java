@@ -16,9 +16,9 @@ public class Casos {
         int[] capacidades;
 
         switch (numeroCaso) {
-            case 1 -> { bicis = caso1Bicis;     capacidades = caso1Capacidad; }
-            case 2 -> { bicis = caso2Bicis;     capacidades = caso2Capacidad; }
-            case 3 -> { bicis = caso3Bicis;     capacidades = caso3Capacidad; }
+            case 1 -> { bicis = caso1Bicis; capacidades = caso1Capacidad; }
+            case 2 -> { bicis = caso2Bicis; capacidades = caso2Capacidad; }
+            case 3 -> { bicis = caso3Bicis; capacidades = caso3Capacidad; }
             default -> throw new IllegalArgumentException("Caso no válido: " + numeroCaso);
         }
 

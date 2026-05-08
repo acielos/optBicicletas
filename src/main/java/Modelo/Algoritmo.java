@@ -9,6 +9,8 @@ public abstract class Algoritmo {
     protected List<Estacion> listaEstaciones;
     protected Camion camion = new Camion();
 
+    public List<double[]> historialExplotacion = new ArrayList<>();
+
     // Semillas para los algoritmos
     protected long[] semilla = {12345L, 67890L, 11111L, 54321L, 99999L};
 
@@ -47,7 +49,10 @@ public abstract class Algoritmo {
         numEvaluaciones++;
         double entropia  = calcularEntropiaTotal(estaciones);
         double nEstaciones = estaciones.size() -1;
-        return kms + 1.5 * (nEstaciones - entropia);
+
+        double fobj = kms + 1.5 * (nEstaciones - entropia);
+        historialExplotacion.add(new double[]{numEvaluaciones, fobj, mejorFuncionObjetivo});
+        return fobj;
     }
 
     protected double calcularEntropiaTotal(List<Estacion> estaciones) {
@@ -156,7 +161,7 @@ public abstract class Algoritmo {
         return mejorVecino;
     }
 
-    // Método para hacer una mutacion "fuerte"?
+    // Método para hacer una mutacion
     protected List<Estacion> mutacionFuerte(List<Estacion> dataset, int tamano, Random rand) {
         // Hacemos una copia de nuestro dataset
         List<Estacion> copia = Dataset.copiaDataset(dataset);
@@ -221,5 +226,13 @@ public abstract class Algoritmo {
         System.out.printf("Función objetivo      : %.4f%n", this.mejorFuncionObjetivo);
         System.out.printf("Evaluaciones          : %d%n", this.numEvaluaciones);
         System.out.printf("%nCarga final del camión: %d/%d bicis%n", this.camion.carga, this.camion.getCapacidad());
+
+
+        System.out.println("\nEstado final de las estaciones:");
+        System.out.printf("%-6s %-10s %-10s %-8s%n", "ID", "Carga", "Capacidad", "% ocup.");
+        for (Estacion e : recorrido) {
+            double pct = 100.0 * e.carga / e.capacidad;
+            System.out.printf("%-6d %-10d %-10d %.1f%%%n", e.id, e.carga, e.capacidad, pct);
+        }
     }
 }

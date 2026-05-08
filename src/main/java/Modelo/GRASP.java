@@ -17,6 +17,7 @@ public class GRASP extends Algoritmo{
     public void run() {
         for(int i = 0; i < 5; i++){
             // Reseteamos por si a caso
+            this.historialExplotacion.clear();
             this.mejorFuncionObjetivo = Double.POSITIVE_INFINITY;
             this.numEvaluaciones = 0;
             this.camion.reset();
@@ -33,7 +34,7 @@ public class GRASP extends Algoritmo{
             // Bucle de iteraciones de GRASP
             int iteraciones = 10;
             for (int j = 0; j < iteraciones; j++) {
-                // Generamos un greedy probabilistico y le aplicamos la BL
+
                 List<Estacion> solucionGreedy = greedyProbabilistico(rand);
                 List<Estacion> solucionMejorada = aplicarBusquedaLocal(solucionGreedy);
 
@@ -41,7 +42,7 @@ public class GRASP extends Algoritmo{
                 double FOLocal = calcularFObjetivo(distanciaLocal, solucionMejorada);
                 double entropiaLocal = calcularEntropiaTotal(solucionMejorada);
 
-                // Comprobamos si es mejor o no que lo que tenemos
+
                 if (FOLocal < mejorFOSemilla) {
                     mejorFOSemilla = FOLocal;
                     mejorDistanciaLocal = distanciaLocal;
@@ -55,16 +56,24 @@ public class GRASP extends Algoritmo{
             this.entropiaFinal = mejorEntropiaLocal;
             this.recorrido = mejorLista;
 
-            // mosrtamos los resultados
             mostrarResultados("GRASP");
+
+//            String nombreFichero = "historial_" + "GRASP" + "_semilla" + i + "_Caso1" + ".txt";
+//            try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter(nombreFichero))) {
+//                pw.println("eval;fObjActual;mejorFObj");
+//                for (double[] punto : historialExplotacion) {
+//                    pw.printf("%.0f;%.4f;%.4f%n", punto[0], punto[1], punto[2]);
+//                }
+//                System.out.println("[HISTORIAL guardado en: " + nombreFichero + "]");
+//            } catch (java.io.IOException e) {
+//                System.err.println("Error guardando historial: " + e.getMessage());
+//            }
         }
     }
 
     private List<Estacion> greedyProbabilistico(Random rand) {
-        // Generamos una copia con la que vamos a trabajar
-        List<Estacion> copiaGreedy = Dataset.copiaDataset(this.listaEstaciones);
 
-        // Reseteamos por si a caso
+        List<Estacion> copiaGreedy = Dataset.copiaDataset(this.listaEstaciones);
         this.camion.reset();
 
         // Las listas cpm las que vamos a trabjaar
@@ -85,21 +94,21 @@ public class GRASP extends Algoritmo{
             for (Estacion candidata:noVisitadas) {
 
                 // Usamos la inversa de la distancia, para incluirla o no en la lista de candidatas
-                double distanciaInversa = (1.0) / (distancias[estActual][candidata.id]);
+                double distancia = (distancias[estActual][candidata.id]);
 
-                // Usaremos también la entropía de cada estación, una qu eno esté muy equilibrada, será mas importante vigilarla
+                // Usaremos también la entropía de cada estación, una qu eno esté muy equilibrada, será mas importante visitarla
                 // para que la entropía final sea mínima
                 double objetivoCapacidad = Math.ceil(candidata.capacidad/2.0);
                 double deficitCapacidad = Math.abs(candidata.carga - objetivoCapacidad) / candidata.capacidad;
 
-                double heuristica = 0.5 * distanciaInversa + 0.5 * deficitCapacidad;
+                double puntuacion = 0.5 * distancia + 1.5 * deficitCapacidad;
 
                 // Añadimos nuestra estación para poder estudiarla más adelante
-                puntos.add(new estacionCandidata(candidata.id, heuristica));
+                puntos.add(new estacionCandidata(candidata.id, puntuacion));
             }
 
             // Ordenamos nuestra lista de puntos para quedarnos con las 3 primeras
-            puntos.sort((a,b) ->  Double.compare(b.heuristica, a.heuristica));
+            puntos.sort((a,b) ->  Double.compare(b.puntuacion, a.puntuacion));
 
             // Variables que usaremos
             int tamLista = 3;
@@ -108,12 +117,10 @@ public class GRASP extends Algoritmo{
             // Nos quedaremos con las 3 primeras, siempre que haya al menos 3
             List<estacionCandidata> puntosRCL = puntos.subList(0, tamannoRCL);
 
-            // El greedy probabilístico usa una ruleta ponderada;
-
-            // Suma de la heuristica de cada uno de los elementos
+            // Suma de la puntuacion de cada uno de los elementos
             double sumaTotal = 0;
             for (estacionCandidata entrada : puntosRCL) {
-                sumaTotal += entrada.heuristica;
+                sumaTotal += entrada.puntuacion;
             }
 
             // Generamos el numero para la ruleta
@@ -122,12 +129,12 @@ public class GRASP extends Algoritmo{
             // Recorremos nuestra ruleta
             double resultado = 0;
 
-            // Por si a caso hubiera error, elegiríamos la última estación de las guardadas
+            // Por si error, elegimos la última estación de las guardadas
             int estacionElegida = puntosRCL.getLast().id;
 
             // Hacemos el bucle ahora si para nuestra ruleta
             for (estacionCandidata entrada : puntosRCL) {
-                resultado += entrada.heuristica;
+                resultado += entrada.puntuacion;
                 if (numAleatorio <= resultado) {
                     estacionElegida = entrada.id;
                     break;
@@ -156,6 +163,6 @@ public class GRASP extends Algoritmo{
         }
         return solucion;
     }
-    private record estacionCandidata(int id, double heuristica){}
+    private record estacionCandidata(int id, double puntuacion){}
 }
 
