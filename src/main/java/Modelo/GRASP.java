@@ -42,12 +42,12 @@ public class GRASP extends Algoritmo{
                 double FOLocal = calcularFObjetivo(distanciaLocal, solucionMejorada);
                 double entropiaLocal = calcularEntropiaTotal(solucionMejorada);
 
-
                 if (FOLocal < mejorFOSemilla) {
                     mejorFOSemilla = FOLocal;
                     mejorDistanciaLocal = distanciaLocal;
                     mejorEntropiaLocal = entropiaLocal;
                     mejorLista = solucionMejorada;
+                    this.mejorFuncionObjetivo = FOLocal;
                 }
             }
 
@@ -58,16 +58,7 @@ public class GRASP extends Algoritmo{
 
             mostrarResultados("GRASP");
 
-//            String nombreFichero = "historial_" + "GRASP" + "_semilla" + i + "_Caso1" + ".txt";
-//            try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter(nombreFichero))) {
-//                pw.println("eval;fObjActual;mejorFObj");
-//                for (double[] punto : historialExplotacion) {
-//                    pw.printf("%.0f;%.4f;%.4f%n", punto[0], punto[1], punto[2]);
-//                }
-//                System.out.println("[HISTORIAL guardado en: " + nombreFichero + "]");
-//            } catch (java.io.IOException e) {
-//                System.err.println("Error guardando historial: " + e.getMessage());
-//            }
+            // guardarDatos("GRASP", i);
         }
     }
 

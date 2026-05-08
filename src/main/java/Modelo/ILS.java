@@ -74,6 +74,7 @@ public class ILS extends Algoritmo{
                     funcionMejor = FO_Mutada;
                     distanciaMejor = distancia_Mutada;
                     entropiaMejor = calcularEntropiaTotal(solucionLocalMutadaBL);
+                    this.mejorFuncionObjetivo = FO_Mutada;
                 }
 
                 if (FO_Mutada < funcionLocalMejor) {
@@ -89,16 +90,7 @@ public class ILS extends Algoritmo{
             // Mostramos los resultados
             mostrarResultados("ILS");
 
-//            String nombreFichero = "historial_" + "ILS" + "_semilla" + i + "_Caso1" + ".txt";
-//            try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter(nombreFichero))) {
-//                pw.println("eval;fObjActual;mejorFObj");
-//                for (double[] punto : historialExplotacion) {
-//                    pw.printf("%.0f;%.4f;%.4f%n", punto[0], punto[1], punto[2]);
-//                }
-//                System.out.println("[HISTORIAL guardado en: " + nombreFichero + "]");
-//            } catch (java.io.IOException e) {
-//                System.err.println("Error guardando historial: " + e.getMessage());
-//            }
+            // guardarDatos("ILS", i);
         }
     }
 }

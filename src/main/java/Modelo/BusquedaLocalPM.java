@@ -40,8 +40,7 @@ public class BusquedaLocalPM extends Algoritmo {
             List<Estacion> mejorVecino = new ArrayList<>(mezclado);
 
             //Recomponemos la solución para asegurar que estaciones y cargas vayan en conjunto
-            List<Estacion> inicialOrdenado = new ArrayList<>();
-            inicialOrdenado = recomponer(mezclado);
+            List<Estacion> inicialOrdenado = recomponer(mezclado);
 
             // Equilibramos nuestra solucion inicial
             for (Estacion e : inicialOrdenado) {
@@ -70,7 +69,6 @@ public class BusquedaLocalPM extends Algoritmo {
                 for (int l = 1; l < mejorVecino.size(); l++) {
                     for (int m = l+1; m < mejorVecino.size(); m++) {
 
-                        //
                         List<Estacion> vecinoOrden = new ArrayList<>(mejorVecino);
                         Collections.swap(vecinoOrden, l, m);
 
@@ -101,16 +99,7 @@ public class BusquedaLocalPM extends Algoritmo {
             // Mostramos por pantalla la distancia calculada con cada una de las 5 semillas
             mostrarResultados("Busqueda Local PM");
 
-//            String nombreFichero = "historial_" + "BLPM" + "_semilla" + i + "_Caso1" + ".txt";
-//            try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter(nombreFichero))) {
-//                pw.println("eval;fObjActual;mejorFObj");
-//                for (double[] punto : historialExplotacion) {
-//                    pw.printf("%.0f;%.4f;%.4f%n", punto[0], punto[1], punto[2]);
-//                }
-//                System.out.println("[HISTORIAL guardado en: " + nombreFichero + "]");
-//            } catch (java.io.IOException e) {
-//                System.err.println("Error guardando historial: " + e.getMessage());
-//            }
+            // guardarDatos("BL-PM", i);
         }
     }
 }

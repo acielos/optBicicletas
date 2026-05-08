@@ -1,6 +1,7 @@
 package main.java.Modelo;
 
 import java.util.*;
+
 import main.java.DataTypes.*;
 
 public abstract class Algoritmo {
@@ -27,9 +28,6 @@ public abstract class Algoritmo {
     public double entropiaFinal      = 0.0;
     public double fObjetivo          = 0.0;
     public int numEvaluaciones = 0;
-
-    // Alpha para la función objetivo: Fobj = Kms + alpha * (N - Entropia)
-    protected double alpha = 1.5;
 
     // Método que cada algoritmo debe implementar
     public abstract void run();
@@ -233,6 +231,19 @@ public abstract class Algoritmo {
         for (Estacion e : recorrido) {
             double pct = 100.0 * e.carga / e.capacidad;
             System.out.printf("%-6d %-10d %-10d %.1f%%%n", e.id, e.carga, e.capacidad, pct);
+        }
+    }
+
+    protected void guardarDatos(String algoritmo, int semilla) {
+        String nombreFichero = "historial_" + algoritmo + "_semilla" + semilla + "_Caso " + ".txt";
+        try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter(nombreFichero))) {
+            pw.println("eval;fObjActual;mejorFObj");
+            for (double[] punto : historialExplotacion) {
+                pw.printf("%.0f;%.4f;%.4f%n", punto[0], punto[1], punto[2]);
+            }
+            System.out.println("[HISTORIAL guardado en: " + nombreFichero + "]");
+        } catch (java.io.IOException e) {
+            System.err.println("Error guardando historial: " + e.getMessage());
         }
     }
 }
