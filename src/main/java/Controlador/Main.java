@@ -73,11 +73,12 @@ public class Main {
                         System.out.println("    3. Grasp");
                         System.out.println("    4. ILS");
                         System.out.println("    5. VNS");
+                        System.out.println("    6. Genético Simple");
                         System.out.println("    0. Salir");
                         System.out.println("==========================================");
                         System.out.print("      Escoga una opción -> ");
                         opc3 = sc.nextInt();
-                        if (opc3 < 0 || opc3 > 5) {
+                        if (opc3 < 0 || opc3 > 6) {
                             System.out.println("** ERROR - POR FAVOR INTRODUZCA UN VALOR VÁLIDO **");
                         }
 
@@ -97,12 +98,15 @@ public class Main {
                             case 5:
                                 ejecutarAlgoritmo(opc3, dataset);
                                 break;
+                            case 6:
+                                ejecutarAlgoritmo(opc3, dataset);
+                                break;
                         }
                     } while (opc3 != 0);
 
                     break;
                 case 4:
-                    for (int i = 0; i <= 5; i++){
+                    for (int i = 1; i <= 6; i++){
                         ejecutarAlgoritmo(i, dataset);
                     }
 
@@ -140,6 +144,11 @@ public class Main {
                 System.out.println(" **** VNS **** ");
                 Algoritmo vns = new VNS(dataset);
                 vns.run();
+                break;
+            case 6:
+                System.out.println(" **** Genético Simple **** ");
+                Algoritmo gen = new Genetico(dataset);
+                gen.run();
                 break;
         }
     }

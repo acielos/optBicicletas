@@ -49,7 +49,7 @@ public abstract class Algoritmo {
         double nEstaciones = estaciones.size() -1;
 
         double fobj = kms + 1.5 * (nEstaciones - entropia);
-        historialExplotacion.add(new double[]{numEvaluaciones, fobj, mejorFuncionObjetivo});
+        //historialExplotacion.add(new double[]{numEvaluaciones, fobj, mejorFuncionObjetivo});
         return fobj;
     }
 
