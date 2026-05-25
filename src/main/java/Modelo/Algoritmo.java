@@ -44,11 +44,12 @@ public abstract class Algoritmo {
     }
 
     protected double calcularFObjetivo(double kms, List<Estacion> estaciones) {
+        double alpha = 1.5;
         numEvaluaciones++;
         double entropia  = calcularEntropiaTotal(estaciones);
         double nEstaciones = estaciones.size() -1;
 
-        double fobj = kms + 1.5 * (nEstaciones - entropia);
+        double fobj = kms + alpha * (nEstaciones - entropia);
         //historialExplotacion.add(new double[]{numEvaluaciones, fobj, mejorFuncionObjetivo});
         return fobj;
     }
