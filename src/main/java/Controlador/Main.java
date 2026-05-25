@@ -82,26 +82,8 @@ public class Main {
                             System.out.println("** ERROR - POR FAVOR INTRODUZCA UN VALOR VÁLIDO **");
                         }
 
-                        switch (opc3) {
-                            case 1:
-                                ejecutarAlgoritmo(opc3, dataset);
-                                break;
-                            case 2:
-                                ejecutarAlgoritmo(opc3, dataset);
-                                break;
-                            case 3:
-                                ejecutarAlgoritmo(opc3, dataset);
-                                break;
-                            case 4:
-                                ejecutarAlgoritmo(opc3, dataset);
-                                break;
-                            case 5:
-                                ejecutarAlgoritmo(opc3, dataset);
-                                break;
-                            case 6:
-                                ejecutarAlgoritmo(opc3, dataset);
-                                break;
-                        }
+                        ejecutarAlgoritmo(opc3, dataset);
+
                     } while (opc3 != 0);
 
                     break;
