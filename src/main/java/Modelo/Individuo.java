@@ -3,16 +3,17 @@ package main.java.Modelo;
 import main.java.DataTypes.Dataset;
 import main.java.DataTypes.Estacion;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Individuo {
     // Parámetros que usaremos para evaluar el individuo
-    public List<Estacion> cromosoma;
+    public ArrayList<Estacion> cromosoma;
     public double distanciaIndividuo;
     public double entropiaIndividuo;
     public double fitnessIndividuo;
 
-    public Individuo(List<Estacion> dataset) {
+    public Individuo(ArrayList<Estacion> dataset) {
         cromosoma = Dataset.copiaDataset(dataset);
         distanciaIndividuo = 0;
         entropiaIndividuo = 0;

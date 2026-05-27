@@ -30,3 +30,4 @@ bin/
 .DS_Store
 
 AGENTS.md
+grafica_convergencia.py

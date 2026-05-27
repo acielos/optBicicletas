@@ -74,15 +74,16 @@ public class Main {
                         System.out.println("    4. ILS");
                         System.out.println("    5. VNS");
                         System.out.println("    6. Genético Simple");
+                        System.out.println("    7. CHC");
                         System.out.println("    0. Salir");
                         System.out.println("==========================================");
                         System.out.print("      Escoga una opción -> ");
                         opc3 = sc.nextInt();
-                        if (opc3 < 0 || opc3 > 6) {
+                        if (opc3 < 0 || opc3 > 7) {
                             System.out.println("** ERROR - POR FAVOR INTRODUZCA UN VALOR VÁLIDO **");
+                        } else {
+                            ejecutarAlgoritmo(opc3, dataset);
                         }
-
-                        ejecutarAlgoritmo(opc3, dataset);
 
                     } while (opc3 != 0);
 
@@ -131,6 +132,11 @@ public class Main {
                 System.out.println(" **** Genético Simple **** ");
                 Algoritmo gen = new Genetico(dataset);
                 gen.run();
+                break;
+            case 7:
+                System.out.println(" **** CHC **** ");
+                Algoritmo chc = new CHC(dataset);
+                chc.run();
                 break;
         }
     }

@@ -25,9 +25,15 @@ public abstract class Algoritmo {
     // Resultado de la ejecución
     public List<Estacion> recorrido = new ArrayList<>();
     public double distanciaRecorrida = 0.0;
-    public double entropiaFinal      = 0.0;
-    public double fObjetivo          = 0.0;
+    public double entropiaFinal = 0.0;
+    public double fObjetivo = 0.0;
     public int numEvaluaciones = 0;
+
+    // Genéticos...
+    protected List<Individuo> poblacion;
+    protected int tamPoblacion = 30;
+    protected int maxGeneraciones;
+    protected Individuo mejorIndividuo;
 
     // Método que cada algoritmo debe implementar
     public abstract void run();
@@ -197,12 +203,12 @@ public abstract class Algoritmo {
     }
 
     // Método para generar una solución inicial
-    protected List<Estacion> generarSolucionInicial(Random rand) {
+    protected ArrayList<Estacion> generarSolucionInicial(Random rand) {
         // Trabajamos con una copia
         List<Estacion> copia = Dataset.copiaDataset(listaEstaciones);
 
         // Partimos para que la primera no se mueva
-        List<Estacion> resto = new ArrayList<>(copia.subList(1, copia.size()));
+        ArrayList<Estacion> resto = new ArrayList<>(copia.subList(1, copia.size()));
 
         // Mezclamos
         Collections.shuffle(resto, rand);
@@ -246,5 +252,48 @@ public abstract class Algoritmo {
         } catch (java.io.IOException e) {
             System.err.println("Error guardando historial: " + e.getMessage());
         }
+    }
+
+    protected void inicializarPoblacion(Random rand){
+        this.poblacion.clear();
+        for (int i = 0; i < this.tamPoblacion; i++) {
+            ArrayList<Estacion> cromosoma = generarSolucionInicial(rand);
+            Individuo individuo = new Individuo(cromosoma);
+            this.poblacion.add(individuo);
+        }
+    }
+
+    protected void evaluarPoblacion(List<Individuo> poblacion){
+        for (Individuo indi:poblacion) {
+            if (indi != null) {
+                this.camion.reset();
+                List<Estacion> equilibrado = recomponer(indi.cromosoma);
+                indi.distanciaIndividuo = distanciaManhattan.calculaCompleto(equilibrado);
+                indi.fitnessIndividuo = calcularFObjetivo(indi.distanciaIndividuo, equilibrado);
+                indi.entropiaIndividuo = calcularEntropiaTotal(equilibrado);
+            }
+        }
+    }
+
+    protected boolean tiene(List<Estacion> lista, Estacion e){
+        for (Estacion est:lista){
+            if (est != null && est.id == e.id){return true;}
+        }
+        return false;
+    }
+
+    protected void actualizar(){
+        double mejorFitnessGeneracion = Double.POSITIVE_INFINITY;
+
+        for (Individuo indi : this.poblacion) {
+            if (indi.fitnessIndividuo < mejorFitnessGeneracion) {
+                mejorFitnessGeneracion = indi.fitnessIndividuo;
+            }
+        }
+
+        this.historialExplotacion.add(
+                new double[]{this.numEvaluaciones, mejorFitnessGeneracion, this.mejorIndividuo.fitnessIndividuo}
+        );
+
     }
 }

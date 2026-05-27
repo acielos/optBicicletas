@@ -6,18 +6,12 @@ import java.util.*;
 
 public class Genetico extends Algoritmo{
     // Parámetros
-
-    private int tamPoblacion;
     private double probCruce;
     private int torneo;
-    private int maxGeneraciones;
     private double porMutacion;
-    private List<Individuo> poblacion;
-    private Individuo mejorIndividuo;
 
     public Genetico(List<Estacion> dataset) {
         this.listaEstaciones = dataset;
-        this.tamPoblacion = 30;
         this.probCruce = 0.9;
         this.torneo = 3;
         this.maxGeneraciones = 100;
@@ -67,26 +61,6 @@ public class Genetico extends Algoritmo{
     ===============================================================================
     */
 
-
-    private void inicializarPoblacion(Random rand){
-        this.poblacion.clear();
-        for (int i = 0; i < this.tamPoblacion; i++) {
-            List<Estacion> cromosoma = generarSolucionInicial(rand);
-            Individuo individuo = new Individuo(cromosoma);
-            this.poblacion.add(individuo);
-        }
-    }
-
-    private void evaluarPoblacion(List<Individuo> poblacion){
-        for (Individuo indi:poblacion) {
-            this.camion.reset();
-            List<Estacion> equilibrado = recomponer(indi.cromosoma);
-            indi.distanciaIndividuo = distanciaManhattan.calculaCompleto(equilibrado);
-            indi.fitnessIndividuo = calcularFObjetivo(indi.distanciaIndividuo, equilibrado);
-            indi.entropiaIndividuo = calcularEntropiaTotal(equilibrado);
-        }
-    }
-
     private Individuo seleccionTornero(Random rand) {
         Individuo mejor = null;
         for (int i = 0; i < torneo; i++) {
@@ -132,7 +106,7 @@ public class Genetico extends Algoritmo{
         }
 
         // Primer hijo
-        List<Estacion> cromosomaHijo = new ArrayList<>(Collections.nCopies(tamanno, null));
+        ArrayList<Estacion> cromosomaHijo = new ArrayList<>(Collections.nCopies(tamanno, null));
 
         // Rellenamos con el padre
         for (int i = inicio; i <= fin; i++) {
@@ -167,7 +141,7 @@ public class Genetico extends Algoritmo{
         resultado.add(hijo);
 
         // Segundo hijo que es casi igual
-        List<Estacion> cromosomaHija = new ArrayList<>(Collections.nCopies(tamanno, null));
+        ArrayList<Estacion> cromosomaHija = new ArrayList<>(Collections.nCopies(tamanno, null));
 
         // Rellenamos con la madre
         for (int i = inicio; i <= fin; i++) {
@@ -261,28 +235,6 @@ public class Genetico extends Algoritmo{
                 this.mejorIndividuo = individuo.clonarIndividuo();
             }
         }
-    }
-
-    private void actualizar(){
-        double mejorFitnessGeneracion = Double.POSITIVE_INFINITY;
-
-        for (Individuo indi : this.poblacion) {
-            if (indi.fitnessIndividuo < mejorFitnessGeneracion) {
-                mejorFitnessGeneracion = indi.fitnessIndividuo;
-            }
-        }
-
-        this.historialExplotacion.add(
-                new double[]{this.numEvaluaciones, mejorFitnessGeneracion, this.mejorIndividuo.fitnessIndividuo}
-        );
-
-    }
-
-    private boolean tiene(List<Estacion> lista, Estacion e){
-        for (Estacion est:lista){
-            if (est != null && est.id == e.id){return true;}
-        }
-        return false;
     }
 
     private boolean completo(List<Estacion> lista){

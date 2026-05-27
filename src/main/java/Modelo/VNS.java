@@ -1,6 +1,7 @@
 package main.java.Modelo;
 
 import main.java.DataTypes.*;
+import main.java.DataTypes.Estacion;
 
 import java.util.*;
 
