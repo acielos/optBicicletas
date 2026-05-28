@@ -8,13 +8,11 @@ public class CHC extends Algoritmo {
     // Atributos
     private int distUmbral;
     private int distUmbralIni;
-    private double tasaDiver;
     private int numReinicios;
 
     public CHC(List<Estacion> dataset) {
         this.listaEstaciones = dataset;
         this.poblacion = new ArrayList<>();
-        this.maxGeneraciones = 100;
     }
 
     @Override
@@ -41,7 +39,7 @@ public class CHC extends Algoritmo {
             // Generamos generaciones
             while (generacion < this.maxGeneraciones) {
                 ArrayList<Individuo> hijos = generarHijos(rand);
-                reemplazo(hijos, rand);
+                reemplazoCHC(hijos, rand);
                 if (distUmbral <= 0) {
                     reinicializar(rand);
                 }
@@ -61,28 +59,6 @@ public class CHC extends Algoritmo {
 
 
         }
-    }
-
-    private int distanciaArco(Individuo a, Individuo b) {
-        Set<String> arcosB = new HashSet<>();
-        int tam = b.cromosoma.size();
-
-        for (int i = 0; i < tam; i++) {
-            int x = b.cromosoma.get(i).id;
-            int y = b.cromosoma.get((i + 1)%tam).id;
-            arcosB.add(x + "-" + y);
-        }
-
-        int diferencias = 0;
-        for (int i = 0; i < tam; i++) {
-            int x = a.cromosoma.get(i).id;
-            int y = a.cromosoma.get((i + 1)%tam).id;
-            if (!arcosB.contains(x + "-" + y)) {
-                diferencias++;
-            }
-        }
-
-        return diferencias;
     }
 
     private Individuo cruzarIndividuo(Individuo padre, Individuo madre, Random rand) {
@@ -155,7 +131,7 @@ public class CHC extends Algoritmo {
         return hijos;
     }
 
-    private void reemplazo(ArrayList<Individuo> hijos,  Random rand) {
+    private void reemplazoCHC(ArrayList<Individuo> hijos,  Random rand) {
         boolean entro = false;
         Individuo peor = null;
         int inPeor;
@@ -214,4 +190,6 @@ public class CHC extends Algoritmo {
         distUmbral = distUmbralIni;
         numReinicios++;
     }
+
+
 }

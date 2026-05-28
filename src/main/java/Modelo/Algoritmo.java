@@ -32,8 +32,13 @@ public abstract class Algoritmo {
     // Genéticos...
     protected List<Individuo> poblacion;
     protected int tamPoblacion = 30;
-    protected int maxGeneraciones;
+    protected int maxGeneraciones = 1000;
     protected Individuo mejorIndividuo;
+    protected int torneo = 3;
+    protected double probCruce;
+    protected double porMutacion;
+    protected double radioNicho = 4;
+    protected double expSh = 1;
 
     // Método que cada algoritmo debe implementar
     public abstract void run();
@@ -296,4 +301,216 @@ public abstract class Algoritmo {
         );
 
     }
+
+    protected int distanciaArco(Individuo a, Individuo b) {
+        Set<String> arcosB = new HashSet<>();
+        int tam = b.cromosoma.size();
+
+        for (int i = 0; i < tam; i++) {
+            int x = b.cromosoma.get(i).id;
+            int y = b.cromosoma.get((i + 1)%tam).id;
+            arcosB.add(x + "-" + y);
+        }
+
+        int diferencias = 0;
+        for (int i = 0; i < tam; i++) {
+            int x = a.cromosoma.get(i).id;
+            int y = a.cromosoma.get((i + 1)%tam).id;
+            if (!arcosB.contains(x + "-" + y)) {
+                diferencias++;
+            }
+        }
+
+        return diferencias;
+    }
+
+    protected void reemplazo(List<Individuo> herederos, Random rand) {
+        for (Individuo individuo : herederos) {
+            Individuo peor = null;
+            int indicePeor = -1;
+
+            // Nos quedamos con el peor candidato
+            for (int i = 0; i < torneo; i++){
+                int indice = rand.nextInt(this.poblacion.size());
+                Individuo candidato = this.poblacion.get(indice);
+                if (peor == null || candidato.fitnessIndividuo >  peor.fitnessIndividuo) {
+                    peor = candidato;
+                    indicePeor = indice;
+                }
+            }
+
+            // Nos vamos quedando con los mejores individuos
+            if (individuo.fitnessIndividuo < peor.fitnessIndividuo) {
+                this.poblacion.set(indicePeor, individuo);
+            }
+        }
+
+        for (Individuo individuo : this.poblacion) {
+            if (this.mejorIndividuo == null || individuo.fitnessIndividuo < this.mejorIndividuo.fitnessIndividuo) {
+                this.mejorIndividuo = individuo.clonarIndividuo();
+            }
+        }
+    }
+
+    protected boolean completo(List<Estacion> lista){
+        for (Estacion est:lista){
+            if (est == null){return false;}
+        }
+        return true;
+    }
+
+    protected Individuo mutarIndividuo(Individuo padre, Random rand) {
+
+        int tamPadre = padre.cromosoma.size();
+        int nuMutaciones = (int) Math.ceil((tamPadre -1) * porMutacion);
+        Individuo copia = padre.clonarIndividuo();
+
+        for (int i = 0; i < nuMutaciones; i++) {
+            int posicion1 = 1 + rand.nextInt(tamPadre-1);
+            int posicion2 = 1 + rand.nextInt(tamPadre-1);
+            while(posicion1 == posicion2){
+                posicion2 = 1 + rand.nextInt(tamPadre-1);
+            }
+
+            if (posicion1 < posicion2){
+                while(posicion1 < posicion2){
+                    Collections.swap(copia.cromosoma, posicion1, posicion2);
+                    posicion1++;
+                    posicion2--;
+                }
+            } else {
+                while(posicion1 > posicion2){
+                    Collections.swap(copia.cromosoma, posicion1, posicion2);
+                    posicion1--;
+                    posicion2++;
+                }
+            }
+        }
+        return copia;
+    }
+
+    protected List<Individuo> cruzarOX(Individuo padre, Individuo madre, Random rand){
+        List<Individuo> resultado = new ArrayList<>();
+        int tamanno = padre.cromosoma.size();
+        int inicio = 1 + rand.nextInt(tamanno - 2);
+        int fin = inicio + rand.nextInt(tamanno - inicio);
+        if (fin >= tamanno) {
+            fin = tamanno - 1;
+        }
+
+        // Primer hijo
+        ArrayList<Estacion> cromosomaHijo = new ArrayList<>(Collections.nCopies(tamanno, null));
+
+        // Rellenamos con el padre
+        for (int i = inicio; i <= fin; i++) {
+            cromosomaHijo.set(i, padre.cromosoma.get(i));
+        }
+
+        // Rellenamos con la madre
+        for (int i = 0; i < tamanno; i++) {
+            if (cromosomaHijo.get(i) == null) {
+                Estacion gen = madre.cromosoma.get(i);
+                if (!tiene(cromosomaHijo, gen)){
+                    cromosomaHijo.set(i, gen);
+                }
+            }
+        }
+
+        // Comrpobamos no haber dejado ninguna posición libre
+        int indice = (fin + 1) % tamanno;
+        int escritura = (fin + 1) % tamanno;
+        while(!completo(cromosomaHijo)) {
+            Estacion gen = madre.cromosoma.get(indice);
+            if (!tiene(cromosomaHijo, gen)){
+                while (cromosomaHijo.get(escritura) != null) {
+                    escritura = (escritura + 1) % tamanno;
+                }
+                cromosomaHijo.set(escritura, gen);
+            }
+            indice = (indice + 1) % tamanno;
+        }
+
+        Individuo hijo = new Individuo(cromosomaHijo);
+        resultado.add(hijo);
+
+        // Segundo hijo que es casi igual
+        ArrayList<Estacion> cromosomaHija = new ArrayList<>(Collections.nCopies(tamanno, null));
+
+        // Rellenamos con la madre
+        for (int i = inicio; i <= fin; i++) {
+            cromosomaHija.set(i, madre.cromosoma.get(i));
+        }
+
+        // Rellenamos con el padre
+        for (int i = 0; i < tamanno; i++) {
+            if (cromosomaHija.get(i) == null) {
+                Estacion gen = padre.cromosoma.get(i);
+                if (!tiene(cromosomaHija, gen)){
+                    cromosomaHija.set(i, gen);
+                }
+            }
+        }
+
+        // Comrpobamos no haber dejado ninguna posición libre
+        indice = (fin + 1) % tamanno;
+        int escrituraHija = (fin + 1) % tamanno;
+        while(!completo(cromosomaHija)) {
+            Estacion gen = padre.cromosoma.get(indice);
+            if (!tiene(cromosomaHija, gen)){
+                while (cromosomaHija.get(escrituraHija) != null) {
+                    escrituraHija = (escrituraHija + 1) % tamanno;
+                }
+                cromosomaHija.set(escrituraHija, gen);
+            }
+            indice = (indice + 1) % tamanno;
+        }
+
+        Individuo hija = new Individuo(cromosomaHija);
+
+        resultado.add(hija);
+
+        return resultado;
+    }
+
+    protected List<Individuo> cruzarPoblacion(Random rand){
+        List<Individuo> hijos = new ArrayList<>();
+
+        for (int i = 0; i < this.tamPoblacion/2; i++) {
+            Individuo padre = seleccionTornero(rand);
+            Individuo madre = seleccionTornero(rand);
+
+            while (madre == padre) {
+                madre = seleccionTornero(rand);
+            }
+            if (rand.nextDouble() < probCruce) {
+                List<Individuo> resultado = cruzarOX(padre, madre, rand);
+                hijos.addAll(resultado);
+            } else {
+                Individuo hijo = mutarIndividuo(padre, rand);
+                Individuo hija = mutarIndividuo(madre, rand);
+                hijos.add(hijo);
+                hijos.add(hija);
+            }
+        }
+        evaluarPoblacion(hijos);
+
+        return hijos;
+    }
+
+    protected Individuo seleccionTornero(Random rand) {
+        Individuo mejor = null;
+        for (int i = 0; i < torneo; i++) {
+            int indice = rand.nextInt(this.poblacion.size());
+            Individuo candidato = this.poblacion.get(indice);
+            if (mejor == null || candidato.fitnessIndividuo < mejor.fitnessIndividuo) {
+                mejor = candidato;
+            }
+        }
+
+        return mejor.clonarIndividuo();
+    }
+
+
+
+
 }

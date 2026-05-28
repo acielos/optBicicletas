@@ -75,11 +75,12 @@ public class Main {
                         System.out.println("    5. VNS");
                         System.out.println("    6. Genético Simple");
                         System.out.println("    7. CHC");
+                        System.out.println("    8. Multimodal");
                         System.out.println("    0. Salir");
                         System.out.println("==========================================");
                         System.out.print("      Escoga una opción -> ");
                         opc3 = sc.nextInt();
-                        if (opc3 < 0 || opc3 > 7) {
+                        if (opc3 < 0 || opc3 > 8) {
                             System.out.println("** ERROR - POR FAVOR INTRODUZCA UN VALOR VÁLIDO **");
                         } else {
                             ejecutarAlgoritmo(opc3, dataset);
@@ -89,7 +90,7 @@ public class Main {
 
                     break;
                 case 4:
-                    for (int i = 1; i <= 6; i++){
+                    for (int i = 1; i <= 8; i++){
                         ejecutarAlgoritmo(i, dataset);
                     }
 
@@ -138,6 +139,12 @@ public class Main {
                 Algoritmo chc = new CHC(dataset);
                 chc.run();
                 break;
+            case 8:
+                System.out.println(" **** Multimodal **** ");
+                Algoritmo multi = new Multimodal(dataset);
+                multi.run();
+                break;
+
         }
     }
 
