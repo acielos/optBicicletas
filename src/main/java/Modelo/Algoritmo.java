@@ -208,12 +208,12 @@ public abstract class Algoritmo {
     }
 
     // Método para generar una solución inicial
-    protected ArrayList<Estacion> generarSolucionInicial(Random rand) {
+    protected List<Estacion> generarSolucionInicial(Random rand) {
         // Trabajamos con una copia
         List<Estacion> copia = Dataset.copiaDataset(listaEstaciones);
 
         // Partimos para que la primera no se mueva
-        ArrayList<Estacion> resto = new ArrayList<>(copia.subList(1, copia.size()));
+        List<Estacion> resto = new ArrayList<>(copia.subList(1, copia.size()));
 
         // Mezclamos
         Collections.shuffle(resto, rand);
@@ -262,7 +262,7 @@ public abstract class Algoritmo {
     protected void inicializarPoblacion(Random rand){
         this.poblacion.clear();
         for (int i = 0; i < this.tamPoblacion; i++) {
-            ArrayList<Estacion> cromosoma = generarSolucionInicial(rand);
+            List<Estacion> cromosoma = generarSolucionInicial(rand);
             Individuo individuo = new Individuo(cromosoma);
             this.poblacion.add(individuo);
         }
@@ -399,7 +399,7 @@ public abstract class Algoritmo {
         }
 
         // Primer hijo
-        ArrayList<Estacion> cromosomaHijo = new ArrayList<>(Collections.nCopies(tamanno, null));
+        List<Estacion> cromosomaHijo = new ArrayList<>(Collections.nCopies(tamanno, null));
 
         // Rellenamos con el padre
         for (int i = inicio; i <= fin; i++) {
@@ -434,7 +434,7 @@ public abstract class Algoritmo {
         resultado.add(hijo);
 
         // Segundo hijo que es casi igual
-        ArrayList<Estacion> cromosomaHija = new ArrayList<>(Collections.nCopies(tamanno, null));
+        List<Estacion> cromosomaHija = new ArrayList<>(Collections.nCopies(tamanno, null));
 
         // Rellenamos con la madre
         for (int i = inicio; i <= fin; i++) {

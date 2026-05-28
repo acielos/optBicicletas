@@ -179,7 +179,7 @@ public class CHC extends Algoritmo {
 
         // El resto, aleatorios
         for (int i = 0; i < this.tamPoblacion-1; i++) {
-            ArrayList<Estacion> cromo = generarSolucionInicial(rand);
+            List<Estacion> cromo = generarSolucionInicial(rand);
             this.poblacion.add(new Individuo(cromo));
         }
 

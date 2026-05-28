@@ -8,12 +8,12 @@ import java.util.List;
 
 public class Individuo {
     // Parámetros que usaremos para evaluar el individuo
-    public ArrayList<Estacion> cromosoma;
+    public List<Estacion> cromosoma;
     public double distanciaIndividuo;
     public double entropiaIndividuo;
     public double fitnessIndividuo;
 
-    public Individuo(ArrayList<Estacion> dataset) {
+    public Individuo(List<Estacion> dataset) {
         cromosoma = Dataset.copiaDataset(dataset);
         distanciaIndividuo = 0;
         entropiaIndividuo = 0;

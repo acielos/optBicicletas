@@ -6,12 +6,12 @@ import java.util.*;
 
 public class Dataset {
     // Método para leer los datasets
-    public static ArrayList<Estacion> leerFicheros(String nombre) throws IOException {
+    public static List<Estacion> leerFicheros(String nombre) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(nombre))) {
             String linea;
             int dimension = -1;
 
-            ArrayList<Estacion> lecturaDataset = new ArrayList<>();
+            List<Estacion> lecturaDataset = new ArrayList<>();
 
             // Leer cabecera hasta NODE_COORD_SECTION
             while ((linea = br.readLine()) != null) {
@@ -72,8 +72,8 @@ public class Dataset {
     // Método para copiar los datasets
     // public static List<Estacion> copiaDataset(List<Estacion> dataset) { return new ArrayList<>(dataset);}
 
-    public static ArrayList<Estacion> copiaDataset(List<Estacion> dataset) {
-        ArrayList<Estacion> copia = new ArrayList<>(dataset.size());
+    public static List<Estacion> copiaDataset(List<Estacion> dataset) {
+        List<Estacion> copia = new ArrayList<>(dataset.size());
         for (Estacion e : dataset) {
             Estacion nueva = new Estacion(e.id, e.latitud, e.longitud);
             nueva.carga     = e.carga;
