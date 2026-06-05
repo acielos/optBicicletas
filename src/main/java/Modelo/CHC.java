@@ -133,13 +133,13 @@ public class CHC extends Algoritmo {
     }
 
     private void reemplazoCHC(ArrayList<Individuo> hijos, Random rand) {
-        // 1. Combinar padres + hijos no nulos en pool de 2N
+        // Padres + hijos
         List<Individuo> pool = new ArrayList<>(this.poblacion);
         for (Individuo h : hijos) {
             if (h != null) pool.add(h);
         }
 
-        // 2. Eliminar duplicados (misma secuencia de arcos)
+        // Fuera duplicados
         List<Individuo> unicos = new ArrayList<>();
         for (Individuo ind : pool) {
             boolean duplicado = false;
@@ -152,23 +152,23 @@ public class CHC extends Algoritmo {
             if (!duplicado) unicos.add(ind);
         }
 
-        // 3. Ordenar por fitness (menor = mejor en minimización)
+        // Ordenamos
         unicos.sort(Comparator.comparingDouble(i -> i.fitnessIndividuo));
 
-        // 4. Seleccionar los N mejores
+        // Solo los mejores
         this.poblacion.clear();
         for (int i = 0; i < this.tamPoblacion && i < unicos.size(); i++) {
             this.poblacion.add(unicos.get(i));
         }
 
-        // 5. Rellenar con aleatorios si faltan
+        // Si hay huecos, aleatorios
         while (this.poblacion.size() < this.tamPoblacion) {
             List<Estacion> cromo = generarSolucionInicial(rand);
             this.poblacion.add(new Individuo(cromo));
         }
         evaluarPoblacion(this.poblacion);
 
-        // 6. Determinar si entró algún hijo (para umbral)
+        // Entra algun hijo o no
         boolean entro = false;
         for (Individuo h : hijos) {
             if (h != null && this.poblacion.contains(h)) {
@@ -176,9 +176,11 @@ public class CHC extends Algoritmo {
                 break;
             }
         }
-        if (!entro) distUmbral--;
+        if (!entro) {
+            distUmbral--;
+        }
 
-        // 7. Actualizar mejor individuo
+        // Actualizamos el mejor
         for (Individuo indi : this.poblacion) {
             if (this.mejorIndividuo == null || indi.fitnessIndividuo < this.mejorIndividuo.fitnessIndividuo) {
                 this.mejorIndividuo = indi.clonarIndividuo();

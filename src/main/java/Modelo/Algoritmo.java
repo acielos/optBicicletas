@@ -312,12 +312,14 @@ public abstract class Algoritmo {
         Set<String> arcosB = new HashSet<>();
         int tam = b.cromosoma.size();
 
+        // Guardamos los arcos
         for (int i = 0; i < tam; i++) {
             int x = b.cromosoma.get(i).id;
             int y = b.cromosoma.get((i + 1)%tam).id;
             arcosB.add(x + "-" + y);
         }
 
+        // Comprobamos la diferencia
         int diferencias = 0;
         for (int i = 0; i < tam; i++) {
             int x = a.cromosoma.get(i).id;
