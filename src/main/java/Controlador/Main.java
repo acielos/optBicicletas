@@ -97,7 +97,7 @@ public class Main {
                         casos.aplicarCaso(dataset, caso);
                         numCaso = caso;
                         System.out.println("\n========== CASO " + caso + " ==========");
-                        for (int i = 1; i <= 8; i++) {
+                        for (int i = 6; i <= 8; i++) {
                             ejecutarAlgoritmo(i, dataset, numCaso);
                         }
                     }
