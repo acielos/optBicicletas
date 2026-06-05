@@ -72,8 +72,13 @@ public class Greedy extends Algoritmo {
 
         this.mejorFuncionObjetivo = funObjetivo;
         this.fObjetivo = funObjetivo;
+        this.entropiaFinal = entropia;
+
+        // Guardamos historial (1 punto de datos)
+        this.historialExplotacion.add(new double[]{this.numEvaluaciones, funObjetivo, funObjetivo});
 
         // mostramos los resultados
         mostrarResultados("Greedy");
+        guardarDatos("Greedy", 0, numCaso);
     }
 }

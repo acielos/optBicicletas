@@ -29,19 +29,25 @@ public abstract class Algoritmo {
     public double fObjetivo = 0.0;
     public int numEvaluaciones = 0;
 
+    // Caso activo
+    protected int numCaso;
+
     // Genéticos...
     protected List<Individuo> poblacion;
     protected int tamPoblacion = 30;
-    protected int maxGeneraciones = 1000;
+    protected int maxGeneraciones = 100;
     protected Individuo mejorIndividuo;
     protected int torneo = 3;
     protected double probCruce;
-    protected double porMutacion;
     protected double radioNicho = 4;
     protected double expSh = 1;
 
     // Método que cada algoritmo debe implementar
     public abstract void run();
+
+    public void setNumCaso(int numCaso) {
+        this.numCaso = numCaso;
+    }
 
     protected void calcularDistancias() {
         for (int i = 0; i < listaEstaciones.size(); i++) {
@@ -246,12 +252,12 @@ public abstract class Algoritmo {
         }
     }
 
-    protected void guardarDatos(String algoritmo, int semilla) {
-        String nombreFichero = "historial_" + algoritmo + "_semilla" + semilla + "_Caso " + ".txt";
+    protected void guardarDatos(String algoritmo, int semilla, int numCaso) {
+        String nombreFichero = "historial_" + algoritmo + "_semilla" + semilla + "_Caso" + numCaso + ".txt";
         try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter(nombreFichero))) {
-            pw.println("eval;fObjActual;mejorFObj");
+            pw.println("eval;fObj;kms;entropia");
             for (double[] punto : historialExplotacion) {
-                pw.printf("%.0f;%.4f;%.4f%n", punto[0], punto[1], punto[2]);
+                pw.printf("%.0f;%.4f;%.4f;%.4f%n", punto[0], punto[1], this.distanciaRecorrida, this.entropiaFinal);
             }
             System.out.println("[HISTORIAL guardado en: " + nombreFichero + "]");
         } catch (java.io.IOException e) {
@@ -333,7 +339,7 @@ public abstract class Algoritmo {
             for (int i = 0; i < torneo; i++){
                 int indice = rand.nextInt(this.poblacion.size());
                 Individuo candidato = this.poblacion.get(indice);
-                if (peor == null || candidato.fitnessIndividuo >  peor.fitnessIndividuo) {
+                if (peor == null || candidato.fitnessIndividuo > peor.fitnessIndividuo) {
                     peor = candidato;
                     indicePeor = indice;
                 }
@@ -345,6 +351,7 @@ public abstract class Algoritmo {
             }
         }
 
+        // Mejor de todos
         for (Individuo individuo : this.poblacion) {
             if (this.mejorIndividuo == null || individuo.fitnessIndividuo < this.mejorIndividuo.fitnessIndividuo) {
                 this.mejorIndividuo = individuo.clonarIndividuo();
@@ -360,32 +367,25 @@ public abstract class Algoritmo {
     }
 
     protected Individuo mutarIndividuo(Individuo padre, Random rand) {
-
-        int tamPadre = padre.cromosoma.size();
-        int nuMutaciones = (int) Math.ceil((tamPadre -1) * porMutacion);
         Individuo copia = padre.clonarIndividuo();
+        int tam = copia.cromosoma.size();
 
-        for (int i = 0; i < nuMutaciones; i++) {
-            int posicion1 = 1 + rand.nextInt(tamPadre-1);
-            int posicion2 = 1 + rand.nextInt(tamPadre-1);
-            while(posicion1 == posicion2){
-                posicion2 = 1 + rand.nextInt(tamPadre-1);
-            }
-
-            if (posicion1 < posicion2){
-                while(posicion1 < posicion2){
-                    Collections.swap(copia.cromosoma, posicion1, posicion2);
-                    posicion1++;
-                    posicion2--;
-                }
-            } else {
-                while(posicion1 > posicion2){
-                    Collections.swap(copia.cromosoma, posicion1, posicion2);
-                    posicion1--;
-                    posicion2++;
-                }
-            }
+        // Seleccionamos dos puntos
+        int p1 = 1 + rand.nextInt(tam - 1);
+        int p2 = 1 + rand.nextInt(tam - 1);
+        while (p1 == p2) {
+            p2 = 1 + rand.nextInt(tam - 1);
         }
+
+        int elementoIzquierdo = Math.min(p1, p2);
+        int elementoDerecho = Math.max(p1, p2);
+
+        while (elementoIzquierdo < elementoDerecho) {
+            Collections.swap(copia.cromosoma, elementoIzquierdo, elementoDerecho);
+            elementoIzquierdo++;
+            elementoDerecho--;
+        }
+
         return copia;
     }
 

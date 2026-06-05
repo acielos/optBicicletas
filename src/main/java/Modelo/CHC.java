@@ -23,6 +23,7 @@ public class CHC extends Algoritmo {
             this.numEvaluaciones = 0;
             distUmbral = this.listaEstaciones.size() / 4;
             distUmbralIni = distUmbral;
+            this.historialExplotacion.clear();
 
             this.numReinicios = 0;
             int generacion = 0;
@@ -54,7 +55,7 @@ public class CHC extends Algoritmo {
             this.recorrido = recomponer(this.mejorIndividuo.cromosoma);
 
             mostrarResultados("CHC");
-            guardarDatos("CHC", i);
+            guardarDatos("CHC", i, numCaso);
 
 
 
@@ -131,39 +132,54 @@ public class CHC extends Algoritmo {
         return hijos;
     }
 
-    private void reemplazoCHC(ArrayList<Individuo> hijos,  Random rand) {
+    private void reemplazoCHC(ArrayList<Individuo> hijos, Random rand) {
+        // 1. Combinar padres + hijos no nulos en pool de 2N
+        List<Individuo> pool = new ArrayList<>(this.poblacion);
+        for (Individuo h : hijos) {
+            if (h != null) pool.add(h);
+        }
+
+        // 2. Eliminar duplicados (misma secuencia de arcos)
+        List<Individuo> unicos = new ArrayList<>();
+        for (Individuo ind : pool) {
+            boolean duplicado = false;
+            for (Individuo u : unicos) {
+                if (distanciaArco(ind, u) == 0) {
+                    duplicado = true;
+                    break;
+                }
+            }
+            if (!duplicado) unicos.add(ind);
+        }
+
+        // 3. Ordenar por fitness (menor = mejor en minimización)
+        unicos.sort(Comparator.comparingDouble(i -> i.fitnessIndividuo));
+
+        // 4. Seleccionar los N mejores
+        this.poblacion.clear();
+        for (int i = 0; i < this.tamPoblacion && i < unicos.size(); i++) {
+            this.poblacion.add(unicos.get(i));
+        }
+
+        // 5. Rellenar con aleatorios si faltan
+        while (this.poblacion.size() < this.tamPoblacion) {
+            List<Estacion> cromo = generarSolucionInicial(rand);
+            this.poblacion.add(new Individuo(cromo));
+        }
+        evaluarPoblacion(this.poblacion);
+
+        // 6. Determinar si entró algún hijo (para umbral)
         boolean entro = false;
-        Individuo peor = null;
-        int inPeor;
-        for (int i = 0; i < hijos.size(); i++) {
-            if (hijos.get(i) == null) {continue;}
-            Individuo hijo =  hijos.get(i);
-            Individuo padre = this.poblacion.get(2*i);
-            Individuo madre = this.poblacion.get(2*i+1);
-
-            // Vemos el peor
-            if (padre.fitnessIndividuo > madre.fitnessIndividuo) {
-                peor = padre;
-                inPeor = 2 * i;
-            } else {
-                peor = madre;
-                inPeor = 2 * i + 1;
-            }
-
-            // Si mejoramos cambiamos
-            if (hijo.fitnessIndividuo < peor.fitnessIndividuo) {
-                this.poblacion.set(inPeor, hijo);
+        for (Individuo h : hijos) {
+            if (h != null && this.poblacion.contains(h)) {
                 entro = true;
+                break;
             }
         }
+        if (!entro) distUmbral--;
 
-        // Si mejoramos bien, si no reducimos
-        if (!entro) {
-            distUmbral--;
-        }
-
-        // Actualicemos
-        for (Individuo indi:this.poblacion) {
+        // 7. Actualizar mejor individuo
+        for (Individuo indi : this.poblacion) {
             if (this.mejorIndividuo == null || indi.fitnessIndividuo < this.mejorIndividuo.fitnessIndividuo) {
                 this.mejorIndividuo = indi.clonarIndividuo();
             }

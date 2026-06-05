@@ -11,7 +11,6 @@ public class Genetico extends Algoritmo{
         this.listaEstaciones = dataset;
         this.probCruce = 0.9;
         this.torneo = 3;
-        this.porMutacion = 0.07;
         this.poblacion = new ArrayList<>();
     }
 
@@ -23,6 +22,7 @@ public class Genetico extends Algoritmo{
             this.mejorIndividuo = null;
             this.numEvaluaciones = 0;
             int generacion = 0;
+            this.historialExplotacion.clear();
 
             inicializarPoblacion(rand);
             evaluarPoblacion(this.poblacion);
@@ -48,13 +48,8 @@ public class Genetico extends Algoritmo{
             this.recorrido = recomponer(this.mejorIndividuo.cromosoma);
 
             mostrarResultados("Genético Simple");
-            guardarDatos("Genético", i);
+            guardarDatos("Genético", i, numCaso);
 
         }
     }
-
-    /*
-    ===============================================================================
-    */
-
 }

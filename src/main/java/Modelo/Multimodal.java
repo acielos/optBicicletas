@@ -9,7 +9,6 @@ public class Multimodal extends Algoritmo {
         this.listaEstaciones = dataset;
         this.probCruce = 0.9;
         this.torneo = 3;
-        this.porMutacion = 0.07;
         this.poblacion = new ArrayList<>();
     }
 
@@ -20,6 +19,7 @@ public class Multimodal extends Algoritmo {
             this.mejorIndividuo = null;
             this.numEvaluaciones = 0;
             int generacion = 0;
+            this.historialExplotacion.clear();
 
             inicializarPoblacion(rand);
             evaluarPoblacionMulti(this.poblacion);
@@ -40,47 +40,44 @@ public class Multimodal extends Algoritmo {
             }
 
             double tam = this.listaEstaciones.size() - 1;
-            this.mejorFuncionObjetivo = this.mejorIndividuo.distanciaIndividuo + 1.5 * (tam - this.mejorIndividuo.entropiaIndividuo);
+            this.mejorFuncionObjetivo = this.mejorIndividuo.fitnessIndividuo;
             this.distanciaRecorrida = this.mejorIndividuo.distanciaIndividuo;
             this.entropiaFinal = this.mejorIndividuo.entropiaIndividuo;
             this.recorrido = recomponer(this.mejorIndividuo.cromosoma);
 
             mostrarResultados("Multimodal");
-            guardarDatos("Multimodal", i);
+            guardarDatos("Multimodal", i, numCaso);
 
         }
     }
 
-    protected void evaluarPoblacionMulti(List<Individuo> hijos){
+    protected void evaluarPoblacionMulti(List<Individuo> hijos) {
         evaluarPoblacion(hijos);
+
         Set<Individuo> todos = new HashSet<>();
         todos.addAll(hijos);
         todos.addAll(this.poblacion);
 
-        for (Individuo indi:hijos) {
-            double nicho = 0.0;
-            if (indi != null) {
-                for (Individuo otro:todos) {
-                    if (otro == indi || otro == null) {continue;}
-                    if (otro != null) {
-                        double distArc = distanciaArco(indi, otro);
-                        if (distArc < radioNicho) {
-                            nicho += 1 - Math.pow(distArc / radioNicho, expSh);
-                        }
-                    }
-                }
+        for (Individuo indi : hijos) {
+            if (indi == null) continue;
 
-                if (nicho > 1) {
-                    indi.fitnessIndividuo *= nicho;
+            double nicho = 0.0;
+            for (Individuo otro : todos) {
+                if (otro == indi || otro == null) continue;
+                double distArc = distanciaArco(indi, otro);
+                if (distArc < radioNicho) {
+                    nicho += 1 - Math.pow(distArc / radioNicho, expSh);
                 }
             }
+
+            indi.fitnessSeleccion = indi.fitnessIndividuo * Math.max(1.0, nicho);
         }
     }
 
-    protected List<Individuo> cruzarPoblacionMulti(Random rand){
+    protected List<Individuo> cruzarPoblacionMulti(Random rand) {
         List<Individuo> hijos = new ArrayList<>();
 
-        for (int i = 0; i < this.tamPoblacion/2; i++) {
+        for (int i = 0; i < this.tamPoblacion / 2; i++) {
             Individuo padre = seleccionTornero(rand);
             Individuo madre = seleccionTornero(rand);
 
@@ -100,6 +97,19 @@ public class Multimodal extends Algoritmo {
         evaluarPoblacionMulti(hijos);
 
         return hijos;
+    }
+
+    @Override
+    protected Individuo seleccionTornero(Random rand) {
+        Individuo mejor = null;
+        for (int i = 0; i < torneo; i++) {
+            int indice = rand.nextInt(this.poblacion.size());
+            Individuo candidato = this.poblacion.get(indice);
+            if (mejor == null || candidato.fitnessSeleccion < mejor.fitnessSeleccion) {
+                mejor = candidato;
+            }
+        }
+        return mejor.clonarIndividuo();
     }
 
 }

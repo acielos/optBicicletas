@@ -12,12 +12,14 @@ public class Individuo {
     public double distanciaIndividuo;
     public double entropiaIndividuo;
     public double fitnessIndividuo;
+    public double fitnessSeleccion;
 
     public Individuo(List<Estacion> dataset) {
         cromosoma = Dataset.copiaDataset(dataset);
         distanciaIndividuo = 0;
         entropiaIndividuo = 0;
         fitnessIndividuo = 0;
+        fitnessSeleccion = 0;
     }
 
     public Individuo(Individuo individuo) {
@@ -25,6 +27,7 @@ public class Individuo {
         distanciaIndividuo = individuo.distanciaIndividuo;
         entropiaIndividuo = individuo.entropiaIndividuo;
         fitnessIndividuo = individuo.fitnessIndividuo;
+        fitnessSeleccion = individuo.fitnessSeleccion;
     }
 
     public Individuo clonarIndividuo() {

@@ -18,6 +18,7 @@ public class Main {
         // Variables qie lo mismo usamos en varios sitios
         String ruta = "././datasetBicis.tsp";
         List<Estacion> dataset = new ArrayList<>();
+        int numCaso = 1;
 
         int opcion;
         do {
@@ -53,6 +54,7 @@ public class Main {
 
                     dataset = Dataset.leerFicheros(ruta);
                     casos.aplicarCaso(dataset, opc1);
+                    numCaso = opc1;
 
                     break;
                 case 2:
@@ -83,17 +85,22 @@ public class Main {
                         if (opc3 < 0 || opc3 > 8) {
                             System.out.println("** ERROR - POR FAVOR INTRODUZCA UN VALOR VÁLIDO **");
                         } else {
-                            ejecutarAlgoritmo(opc3, dataset);
+                            ejecutarAlgoritmo(opc3, dataset, numCaso);
                         }
 
                     } while (opc3 != 0);
 
                     break;
                 case 4:
-                    for (int i = 1; i <= 8; i++){
-                        ejecutarAlgoritmo(i, dataset);
+                    for (int caso = 1; caso <= 3; caso++) {
+                        dataset = Dataset.leerFicheros(ruta);
+                        casos.aplicarCaso(dataset, caso);
+                        numCaso = caso;
+                        System.out.println("\n========== CASO " + caso + " ==========");
+                        for (int i = 1; i <= 8; i++) {
+                            ejecutarAlgoritmo(i, dataset, numCaso);
+                        }
                     }
-
                     break;
                 default:
                     System.out.println("\n ***** Finalización del Programa ***** \n");
@@ -102,46 +109,54 @@ public class Main {
         }while(opcion!=0);
     }
 
-    private static void ejecutarAlgoritmo(int op, List<Estacion> dataset){
+    private static void ejecutarAlgoritmo(int op, List<Estacion> dataset, int numCaso){
         switch (op) {
             case 1:
                 System.out.println(" **** Greedy **** ");
                 Algoritmo greedy = new Greedy(dataset);
+                greedy.setNumCaso(numCaso);
                 greedy.run();
                 break;
             case 2:
                 System.out.println(" **** Búsqueda Local Primer Mejor **** ");
                 Algoritmo busquedaLocalPM = new BusquedaLocalPM(dataset);
+                busquedaLocalPM.setNumCaso(numCaso);
                 busquedaLocalPM.run();
                 break;
             case 3:
                 System.out.println(" **** GRASP **** ");
                 Algoritmo grasp = new GRASP(dataset);
+                grasp.setNumCaso(numCaso);
                 grasp.run();
                 break;
             case 4:
                 System.out.println(" **** ILS **** ");
                 Algoritmo ils = new ILS(dataset);
+                ils.setNumCaso(numCaso);
                 ils.run();
                 break;
             case 5:
                 System.out.println(" **** VNS **** ");
                 Algoritmo vns = new VNS(dataset);
+                vns.setNumCaso(numCaso);
                 vns.run();
                 break;
             case 6:
                 System.out.println(" **** Genético Simple **** ");
                 Algoritmo gen = new Genetico(dataset);
+                gen.setNumCaso(numCaso);
                 gen.run();
                 break;
             case 7:
                 System.out.println(" **** CHC **** ");
                 Algoritmo chc = new CHC(dataset);
+                chc.setNumCaso(numCaso);
                 chc.run();
                 break;
             case 8:
                 System.out.println(" **** Multimodal **** ");
                 Algoritmo multi = new Multimodal(dataset);
+                multi.setNumCaso(numCaso);
                 multi.run();
                 break;
 
